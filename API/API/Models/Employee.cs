@@ -11,9 +11,15 @@ namespace API.Models
         [Required]
         [DataType(DataType.DateTime)]
         public string BirthDate { get; set; }
-        public string Gender { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
         public string HireDate { get; set; }
+    }
+    public enum Gender
+    {
+        Male,
+        Female
     }
 }

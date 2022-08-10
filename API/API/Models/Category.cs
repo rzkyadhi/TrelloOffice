@@ -2,11 +2,12 @@
 
 namespace API.Models
 {
-    public class Role
+    public class Category
     {
         [Key]
-        public int RoleId { get; set; }
-        [Required(ErrorMessage = "Role Name Can't Empty, Try Again")]
+        public int CategoryId { get; set; }
+
+        [Required]
         public string Name { get; set; }
     }
 }
