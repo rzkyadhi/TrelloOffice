@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace API.Repositories
 {
-    public class GenericRepository<TModel, TPrimaryKey> : IGeneralRepository<TModel, TPrimaryKey>
+    public class GenericRepository<TModel> : IGeneralRepository<TModel>
         where TModel : class
     {
         private readonly MyContext myContext;
@@ -21,7 +21,7 @@ namespace API.Repositories
             return data;
         }
 
-        public TModel Get(TPrimaryKey id)
+        public TModel Get(int id)
         {
             var data = myContext.Set<TModel>().Find(id);
             return data;
