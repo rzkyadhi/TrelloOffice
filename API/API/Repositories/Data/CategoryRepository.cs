@@ -3,7 +3,7 @@ using API.Models;
 
 namespace API.Repositories.Data
 {
-    public class CategoryRepository : GenericRepository<Category, int>
+    public class CategoryRepository : GenericRepository<Category>
     {
         private readonly MyContext myContext;
 
