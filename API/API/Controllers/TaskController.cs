@@ -9,17 +9,16 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : BaseController<Category, CategoryRepository>
+    public class TaskController : BaseController<Task, TaskRepository>
     {
-        CategoryRepository repository;
+        private readonly TaskRepository repository;
 
-        public CategoryController(CategoryRepository repository) : base(repository)
+        public TaskController(TaskRepository repository) : base(repository)
         {
             this.repository = repository;
         }
-
         [HttpGet]
-        public ActionResult<List<Category>> Get()
+        public ActionResult<List<Task>> Get()
         {
             var result = repository.Get();
             if (result != null)

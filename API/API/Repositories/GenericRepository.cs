@@ -15,11 +15,11 @@ namespace API.Repositories
             this.myContext = myContext;
         }
 
-        public virtual List<TModel> Get()
+        /*public virtual List<TModel> Get()
         {
             var data = myContext.Set<TModel>().ToList();
             return data;
-        }
+        }*/
 
         public TModel Get(int id)
         {
