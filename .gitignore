@@ -1,0 +1,11 @@
+/API/.vs/
+/API/API/bin/
+/API/API/obj/
+/Client/.vs
+/Client/Client/bin
+/Client/Client/obj
+/API/API/appsettings.json
+/API/API/appsettings.Development.json
+/Client/Client/appsettings.json
+/Client/Client/appsettings.Development.json
+/API/API/API.csproj.user
