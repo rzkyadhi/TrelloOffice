@@ -17,7 +17,7 @@ namespace API.Controllers
         {
             this.repository = repository;
         }
-
+        [HttpGet]
         public ActionResult<List<Task>> Get()
         {
             var result = repository.Get();

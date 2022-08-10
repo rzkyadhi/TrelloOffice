@@ -15,7 +15,7 @@ namespace API.Repositories.Data
             this.myContext = myContext;
         }
 
-        public override List<Task> Get()
+        public List<Task> Get()
         {
             var data = myContext.TB_M_TASK
                 .Include(x => x.Project)

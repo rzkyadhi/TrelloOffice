@@ -18,7 +18,7 @@ namespace API.Base
             this.repository = repository;
         }
 
-        #region GET
+        /*#region GET
         [HttpGet]
         public ActionResult<List<TModel>> Get()
         {
@@ -36,7 +36,7 @@ namespace API.Base
                 message = "NOT FOUND"
             });
         }
-        #endregion GET
+        #endregion GET*/
 
         #region GetId
         [HttpGet("{id}")]
