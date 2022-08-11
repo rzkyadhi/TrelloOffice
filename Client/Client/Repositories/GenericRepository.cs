@@ -24,7 +24,7 @@ namespace Client.Repositories
             accessor = new HttpContextAccessor();
             client = new HttpClient();
             client.BaseAddress = baseUrl;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
         }
 
         #region Delete
