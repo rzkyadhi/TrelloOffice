@@ -27,6 +27,7 @@ namespace Client
             services.AddControllersWithViews();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<CategoryRepository>();
+            services.AddScoped<TaskRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
