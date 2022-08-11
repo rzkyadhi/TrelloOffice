@@ -19,6 +19,7 @@ namespace Client.Models
         public string Gender { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
+        [JsonPropertyName("HireDate")]
         public string HireDate { get; set; }
     }
 }
