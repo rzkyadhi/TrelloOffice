@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Client.Models.Task>
+
+<h1>Task List</h1>
+
+<table class="table table-bordered table-info table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Role User</th>
+			<th scope="col">Project</th>
+			<th scope="col">Category</th>
+			<th scope="col">Task Name</th>
+			<th scope="col">Description</th>
+			<th scope="col">Due Date</th>
+			<th scope="col">Is Completed</th>
+			<th scope="col">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.DisplayFor(model => item.TaskId)</td>
+				<td>@Html.DisplayFor(model => item.RoleUserTask.RoleUserId)</td>
+				<td>@Html.DisplayFor(model => item.Project.Name)</td>
+				<td>@Html.DisplayFor(model => item.Category.Name)</td>
+				<td>@Html.DisplayFor(model => item.Name)</td>
+				<td>@Html.DisplayFor(model => item.Description)</td>
+				<td>@Html.DisplayFor(model => item.DueDate)</td>
+				<td>@Html.DisplayFor(model => item.IsCompleted)</td>
+				<td>
+					<a class="btn btn-warning" asp-route-id="@item.ProjectId" asp-action="Edit">Edit</a>
+					<a class="btn btn-danger" asp-route-id="@item.ProjectId" asp-action="Delete">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<a class="btn btn-primary" asp-action="Create" asp-controller="Project">Add Project</a>
