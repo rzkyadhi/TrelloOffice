@@ -1,6 +1,7 @@
 ﻿using API.Base;
 using API.Models;
 using API.Repositories.Data;
+using API.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace API.Controllers
             this.repository = repository;
         }
         [HttpGet]
-        public ActionResult<List<Task>> Get()
+        public ActionResult<List<TaskVM>> Get()
         {
             var result = repository.Get();
             if (result != null)
