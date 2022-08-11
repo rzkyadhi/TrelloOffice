@@ -1,31 +1,82 @@
 ﻿@model IEnumerable<Client.Models.Project>
 
-<h1>Project List</h1>
+	@{
+	Layout = "_LayoutDashboard";
+	}
 
-<table class="table table-bordered table-info table-hover">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Project Name</th>
-			<th scope="col">Description</th>
-			<th scope="col">Action</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@Html.DisplayFor(model => item.ProjectId)</td>
-				
-				<td>@Html.DisplayFor(model => item.Name)</td>
-				<td>@Html.DisplayFor(model => item.Description)</td>
-				<td>
-					<a class="btn btn-warning" asp-route-id="@item.ProjectId" asp-action="Edit">Edit</a>
-					<a class="btn btn-danger" asp-route-id="@item.ProjectId" asp-action="Delete">Delete</a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+	<div class="container mt-3">
+		<div class="card">
+			<div class="card-body">
+				<h1 class="card-title text-center">Project List</h1>
+				<div class="table-responsive">
+					<div>
+						<table class="table align-items-center" id="tableProject">
+							<thead class="thead-light text-center">
+								<tr>
+									<th scope="col">Id</th>
+									<th scope="col">Project Name</th>
+									<th scope="col">Description</th>
+									<th scope="col">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- @foreach (var item in Model)
+								{
+								<tr class="text-center">
+									<td>@Html.DisplayFor(model => item.ProjectId)</td>
 
-<a class="btn btn-primary" asp-action="Create" asp-controller="Project">Add Project</a>
+									<td>@Html.DisplayFor(model => item.Name)</td>
+									<td>@Html.DisplayFor(model => item.Description)</td>
+									<td>
+										<a class="btn btn-success" asp-route-id="@item.ProjectId"
+											asp-action="Details">Details</a>
+										<a class="btn btn-warning" asp-route-id="@item.ProjectId"
+											asp-action="Edit">Edit</a>
+										<a class="btn btn-danger" asp-route-id="@item.ProjectId"
+											asp-action="Delete">Delete</a>
+									</td>
+								</tr>
+								} -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<button type="button" class="btn btn-primary" onclick=addProject() data-toggle="modal"
+					data-target="#addProject">Add
+					Project</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- ModalCreate -->
+	<div class="modal fade" id="addProject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add Project</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@Html.AntiForgeryToken()
+				<form class="needs-validation" novalidate>
+					<div class="modal-body" id="modalCreate">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button id="submitBtn" class="btn btn-primary" type="submit">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	@section Scripts{
+		<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+		<script src="~/lib/dashboard/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+		<script src="~/lib/dashboard/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+		<script src="~/lib/dashboard/vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="~/js/project.js"></script>
+	}
