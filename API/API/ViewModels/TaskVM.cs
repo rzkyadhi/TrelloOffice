@@ -1,39 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.Models
+namespace API.ViewModels
 {
-    public class Task
+    public class TaskVM
     {
-        [Key]
+        [Required]
         public int TaskId { get; set; }
-        public RoleUserTask RoleUserTask { get; set; }
         [Required]
-        [ForeignKey("RoleUserTask")]
         public int RoleUserTaskId { get; set; }
-        
-
         [Required]
-        [ForeignKey("Project")]
         public int ProjectId { get; set; }
-        public Project Project { get; set; }
-
         [Required]
-        [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
-
         [Required]
         public string Name { get; set; }
-
         [Required]
         public string Description { get; set; }
-
         [Required]
         [DataType(DataType.DateTime)]
-        public string DueDate { get; set; }
-
+        public DateTime DueDate { get; set; }
         [Required]
         public bool IsCompleted { get; set; }
     }
