@@ -115,14 +115,14 @@ function addProject() {
                             success: () => {
                                 $("#tableProject").DataTable().ajax.reload();
                                 $("#addProject").modal('hide'),
-                                    Swal.fire(
+                                    swal(
                                         "Success",
                                         `${obj.name} has been saved`,
                                         "success"
                                     )
                             },
                             failure: () => {
-                                Swal.fire(
+                                swal(
                                     "Internal Server Error",
                                     `Oops, ${obj.name} was not saved`,
                                     "error"
