@@ -82,5 +82,42 @@ namespace Client.Controllers
             return View();
         }
         #endregion Delete
+
+        #region GetJSON
+        public ActionResult GetJSON()
+        {
+            var result = projectRepository.Get();
+            if (result != null) return Ok(new
+            {
+                status = 200,
+                message = "SUCCESS",
+                data = result
+            });
+            return NotFound(new
+            {
+                status = 404,
+                message = "NOT FOUND"
+            });
+        }
+        #endregion
+
+        #region PostJSON
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostJSON(Project project)
+        {
+            var result = projectRepository.Post(project);
+            if (result == System.Net.HttpStatusCode.Created) return Ok(new
+            {
+                status = result,
+                message = "CREATED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion
     }
 }
