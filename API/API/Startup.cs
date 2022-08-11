@@ -1,4 +1,5 @@
 using API.Context;
+using API.Middleware;
 using API.Repositories.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,10 +31,12 @@ namespace API
         {
             services.AddControllers();
             services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrelloOfficeConnectionString")));
+            services.AddScoped<AccountRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskRepository>();
             services.AddSwaggerGen();
+            services.AddTokenAuthentication(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +54,8 @@ namespace API
             app.UseSwaggerUI();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
