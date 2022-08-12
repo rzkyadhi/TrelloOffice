@@ -37,12 +37,13 @@ namespace Client.Controllers
                         var tokenOnly = parseObject["token"].ToString();
 
                         var data = JsonConvert.DeserializeObject<Login>(dataOnly);
+                        HttpContext.Session.SetString("Id", data.Id.ToString());
                         HttpContext.Session.SetString("Email", data.Email);
                         HttpContext.Session.SetString("JWToken", tokenOnly);
 
                         return RedirectToAction("Index", "Dashboard");
                     }
-                    return RedirectToAction("Indext");
+                    return RedirectToAction("Index");
                 }
             }
             return RedirectToAction("Index");
