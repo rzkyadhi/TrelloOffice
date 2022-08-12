@@ -100,5 +100,24 @@ namespace Client.Controllers
             });
         }
         #endregion
+
+        #region EditJSON
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditJson(Task task)
+        {   
+            var result = taskRepository.Put(task);
+            if (result == System.Net.HttpStatusCode.OK) return Ok(new
+            {
+                status = 200,
+                message = "EDITED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion DeleteJSON
     }
 }

@@ -321,26 +321,75 @@ function detailProject(id) {
                     <label for="Task">Task</label>
                         <ul class="list-group">
                             <div class="row">
-                                <div class="col-md-6" id="listGroup">
+                                <div class="col" id="listGroup">
             `;
             $("#taskList").html(task);
             let taskList = "";
             for (let i = 0; i < result.data.length; i++) {
                 if (result.data[i].ProjectId == id) {
-                    taskList += 
-                    `
-                        <li class="list-group-item">${result.data[i].Name}</li>
+                    taskList +=
+                        `
+                        <li class="list-group-item">
+                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}">
+                            ${result.data[i].Name}
+                        </li>
                     `
                 }
+                
+                
             }
-            taskList += 
-            `
+            taskList +=
+                `
                     </div>
                 </div>
             </ul>   
             `
             $("#listGroup").html(taskList);
+
+            for (let i = 0; i < result.data.length; i++) {
+                if ($(`#checkbox${i}`).click(() => {
+                    if ($(`#checkbox${i}`).is(":checked")) {
+                        let check = true;
+                        let obj = {};
+                        obj.TaskId = result.data[i].TaskId;
+                        obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
+                        obj.ProjectId = result.data[i].ProjectId;
+                        obj.CategoryId = result.data[i].CategoryId;
+                        obj.Name = result.data[i].Name;
+                        obj.Description = result.data[i].Description;
+                        obj.DueDate = result.data[i].DueDate;
+                        obj.IsCompleted = check;
+                        console.log(obj);
+                        console.log(obj.DueDate);
+                        $.ajax({
+                            url: "https://localhost:44335/task/editjson",
+                            type: "put",
+                            dataType: "json",
+                            data: obj,
+                            beforeSend: data => {
+                                data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                            },
+                            success: function (data) {
+                                $("#tableProject").DataTable().ajax.reload();
+                                $("#editProject").modal('hide'),
+                                    swal(
+                                        "Success!",
+                                        `${obj.Name} has been edited`,
+                                        "success"
+                                    )
+                            },
+                            failure: function (data) {
+                                swal(
+                                    "Internal Error",
+                                    "Oops, Product was not saved.",
+                                    "error"
+                                )
+                            }
+                        });
+                    }
+                }));
+            }
         })
     });
-    
+
 }
