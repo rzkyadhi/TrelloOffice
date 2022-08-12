@@ -138,6 +138,25 @@ namespace Client.Controllers
         }
         #endregion GetJSONById
 
+        #region EditJSON
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditJson(Project project)
+        {
+            var result = projectRepository.Put(project);
+            if (result == System.Net.HttpStatusCode.OK) return Ok(new
+            {
+                status = 200,
+                message = "EDITED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion DeleteJSON
+
         #region DeleteJSON
         [HttpDelete]
         [ValidateAntiForgeryToken]
