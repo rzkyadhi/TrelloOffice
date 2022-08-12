@@ -19,8 +19,9 @@ $(document).ready(() => {
             "url": "https://localhost:44335/Project/getjson",
             "dataType": "json",
         },
-        "columns": [{
-                "data": "id",
+        "columns": [
+            {
+                "data": "ProjectId",
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 }
@@ -42,10 +43,9 @@ $(document).ready(() => {
                                 <button type="button" onclick="editProduct(${row['id']})" data-toggle="modal" data-target="#editProduct" class="btn btn-warning">
                                     Edit
                                 </button>
-                                <button type="button" onclick="deleteProduct(${row['id']})" class="btn btn-danger">
+                                <button type="button" onclick="deleteProject(${row['ProjectId']})" class="btn btn-danger">
                                     Delete
                                 </button>`
-
                 }
             }
         ],
@@ -134,5 +134,54 @@ function addProject() {
             }
             form.classList.add('was-validated');
         }, false);
+    })
+}
+
+function deleteProject(id) {
+    $.ajax({
+        url: `https://localhost:44335/project/getjsonbyid/${id}`,
+        type: 'get'
+    }).done((result) => {
+        console.log(result);
+        let obj = {};
+        obj.ProjectId = result.data.ProjectId;
+        obj.Name = result.data.Name;
+        obj.Description = result.data.Description;
+        swal({
+            title: "Are you sure?",
+            text: `You will delete ${obj.Name}`,
+            buttons: {
+                cancel: true,
+                confirm: true,
+                closeModal: false
+            },
+        }).then(function (isConfirm) {
+            if (isConfirm === true) {
+                $.ajax({
+                    url: "https://localhost:44335/project/deletejson",
+                    type: "delete",
+                    dataType: "json",
+                    data: obj,
+                    beforeSend: data => {
+                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                    },
+                    success: function (data) {
+                        $("#tableProject").DataTable().ajax.reload();
+                        swal(
+                            "Success!",
+                            `${obj.Name} has been deleted !`,
+                            "success"
+                        )
+                    },
+                    failure: function (data) {
+                        swal(
+                            "Internal Error",
+                            "Oops, Product was not saved.",
+                            "error"
+                        )
+                    }
+                });
+            }
+        })
     })
 }

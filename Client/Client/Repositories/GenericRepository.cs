@@ -38,7 +38,7 @@ namespace Client.Repositories
                     RequestUri = new Uri($"{baseUrl}{request}"),
                     Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")
                 };
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
                 var response = client.SendAsync(requestDelete);
                 response.Wait();
                 var result = response.Result.StatusCode;
