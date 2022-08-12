@@ -37,6 +37,7 @@ namespace API.Controllers
                 {
                     status = 200,
                     message = "Account Validated",
+                    data = result,
                     token = idToken,
                 });
             }

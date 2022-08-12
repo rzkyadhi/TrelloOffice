@@ -4,6 +4,7 @@ namespace Client.Models
 {
     public class Login
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Email Can't Empty, Try Again !")]
         [EmailAddress]
         public string Email { get; set; }
