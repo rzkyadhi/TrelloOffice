@@ -1,9 +1,11 @@
 ﻿using Client.Models;
 using Client.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class ProjectController : Controller
     {
         private readonly ProjectRepository projectRepository;
