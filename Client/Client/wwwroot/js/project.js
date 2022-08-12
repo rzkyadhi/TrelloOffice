@@ -19,8 +19,7 @@ $(document).ready(() => {
             "url": "https://localhost:44335/Project/getjson",
             "dataType": "json",
         },
-        "columns": [
-            {
+        "columns": [{
                 "data": "ProjectId",
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
@@ -37,7 +36,7 @@ $(document).ready(() => {
                 render: function (data, type, row) {
 
                     return `
-                                <button type="button" onclick="editProduct(${row['id']})" data-toggle="modal" data-target="#editProduct" class="btn btn-success">
+                                <button type="button" onclick="detailProject(${row['ProjectId']})" data-toggle="modal" data-target="#detailProject" class="btn btn-success">
                                     Details
                                 </button>
                                 <button type="button" onclick="editProject(${row['ProjectId']})" data-toggle="modal" data-target="#editProject" class="btn btn-warning">
@@ -275,4 +274,73 @@ function deleteProject(id) {
             }
         })
     })
+}
+
+function detailProject(id) {
+    $.ajax({
+        url: `https://localhost:44335/project/getjsonbyid/${id}`,
+        type: 'get'
+    }).done((result) => {
+        let detailModalBody =
+            `
+        <div class="form" id="form-post">
+            <div class="col mb-3">
+                <label for="projectName">Project Name</label>
+                <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
+                    id="projectName" value="${result.data.Name}" readonly required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please Input Valid Project Name!
+                </div>
+            </div>
+            <div class="col mb-3">
+                <label for="Description">Description</label>
+                <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
+                    id="description" value="${result.data.Description}" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please Input Valid Description!
+                </div>
+            </div>
+            <div class="col mb-3" id="taskList">
+            </div>
+        </div>               
+        `;
+        $("#modalDetail").html(detailModalBody);
+        $.ajax({
+            url: `https://localhost:44335/task/getjson`,
+            type: 'get'
+        }).done((result) => {
+            console.log(result);
+            let task =
+                `
+                    <label for="Task">Task</label>
+                        <ul class="list-group">
+                            <div class="row">
+                                <div class="col-md-6" id="listGroup">
+            `;
+            $("#taskList").html(task);
+            let taskList = "";
+            for (let i = 0; i < result.data.length; i++) {
+                if (result.data[i].ProjectId == id) {
+                    taskList += 
+                    `
+                        <li class="list-group-item">${result.data[i].Name}</li>
+                    `
+                }
+            }
+            taskList += 
+            `
+                    </div>
+                </div>
+            </ul>   
+            `
+            $("#listGroup").html(taskList);
+        })
+    });
+    
 }
