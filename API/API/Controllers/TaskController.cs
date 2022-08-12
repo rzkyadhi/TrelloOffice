@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Manager, Employee")]
+    [Authorize(Roles = "Manager,Employee")]
     public class TaskController : BaseController<Task, TaskRepository>
     {
         private readonly TaskRepository repository;
