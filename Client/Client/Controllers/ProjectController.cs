@@ -119,5 +119,61 @@ namespace Client.Controllers
             });
         }
         #endregion
+
+        #region GetJSONById
+        public ActionResult GetJSONById(int id)
+        {
+            var result = projectRepository.Get(id);
+            if (result != null) return Ok(new
+            {
+                status = 200,
+                message = "SUCCESS",
+                data = result
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "BAD REQUEST"
+            });
+        }
+        #endregion GetJSONById
+
+        #region EditJSON
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditJson(Project project)
+        {
+            var result = projectRepository.Put(project);
+            if (result == System.Net.HttpStatusCode.OK) return Ok(new
+            {
+                status = 200,
+                message = "EDITED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion DeleteJSON
+
+        #region DeleteJSON
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteJSON(Project project)
+        {
+            var result = projectRepository.Delete(project);
+            if (result == System.Net.HttpStatusCode.OK) return Ok(new
+            {
+                status = 200,
+                message = "DELETED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "BAD REQUEST"
+            });
+        }
+        #endregion DeleteJSON
     }
 }

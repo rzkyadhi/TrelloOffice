@@ -13,7 +13,7 @@
 						<table class="table align-items-center" id="tableProject">
 							<thead class="thead-light text-center">
 								<tr>
-									<th scope="col">Id</th>
+									<th scope="col">No</th>
 									<th scope="col">Project Name</th>
 									<th scope="col">Description</th>
 									<th scope="col">Action</th>
@@ -54,12 +54,35 @@
 		</div>
 	</div>
 
+	<!-- ModalEdit -->
+	<div class="modal fade" id="editProject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Edit Project</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@Html.AntiForgeryToken()
+				<form class="edit-validation" novalidate>
+					<div class="modal-body" id="modalEdit">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button id="editBtn" class="btn btn-warning" type="submit">Edit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 
 	@section Scripts{
-		<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-		<script src="~/lib/dashboard/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-		<script src="~/lib/dashboard/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-		<script src="~/lib/dashboard/vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-		<script src="~/js/project.js"></script>
+	<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="~/lib/dashboard/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="~/lib/dashboard/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+	<script src="~/lib/dashboard/vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="~/js/project.js"></script>
 	}
