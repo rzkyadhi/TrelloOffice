@@ -2,6 +2,7 @@
 using API.Models;
 using API.Repositories.Data;
 using API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Manager, Employee")]
     public class TaskController : BaseController<Task, TaskRepository>
     {
         private readonly TaskRepository repository;

@@ -10,6 +10,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Manager")]
     public class ProjectController : BaseController<Project, ProjectRepository>
     {
         ProjectRepository repository;
