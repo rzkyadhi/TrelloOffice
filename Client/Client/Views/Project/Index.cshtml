@@ -77,6 +77,29 @@
 		</div>
 	</div>
 
+	<!-- ModalDetails -->
+	<div class="modal fade" id="detailProject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Detail Project</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@Html.AntiForgeryToken()
+				<form class="detail-validation" novalidate>
+					<div class="modal-body" id="modalDetail">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button id="detailBtn" class="btn btn-warning" type="submit">Edit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 
 	@section Scripts{
 	<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
