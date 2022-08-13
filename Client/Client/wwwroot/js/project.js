@@ -384,7 +384,7 @@ function detailProject(id) {
                                 },
                                 success: function (data) {
                                     $("#tableProject").DataTable().ajax.reload();
-                                    $("#modalDetail").modal('hide'),
+                                    $("#detailProject").modal('hide'),
                                         swal(
                                             "Success!",
                                             `${obj.Name} is done !`,
@@ -420,7 +420,7 @@ function detailProject(id) {
                                 },
                                 success: function (data) {
                                     $("#tableProject").DataTable().ajax.reload();
-                                    $("#modalDetail").modal('hide'),
+                                    $("#detailProject").modal('hide'),
                                         swal(
                                             "Success!",
                                             `${obj.Name} is not done yet !`,
