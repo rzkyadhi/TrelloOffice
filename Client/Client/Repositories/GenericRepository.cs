@@ -24,7 +24,7 @@ namespace Client.Repositories
             accessor = new HttpContextAccessor();
             client = new HttpClient();
             client.BaseAddress = baseUrl;
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
         }
 
         #region Delete
@@ -38,7 +38,7 @@ namespace Client.Repositories
                     RequestUri = new Uri($"{baseUrl}{request}"),
                     Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")
                 };
-                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessor.HttpContext.Session.GetString("JWToken"));
                 var response = client.SendAsync(requestDelete);
                 response.Wait();
                 var result = response.Result.StatusCode;

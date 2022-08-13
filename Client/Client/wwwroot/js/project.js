@@ -16,7 +16,7 @@ $(document).ready(() => {
             }
         ],
         "ajax": {
-            "url": "https://localhost:44335/Project/getjson",
+            "url": "https://localhost:44335/Project/GetJSON",
             "dataType": "json",
         },
         "columns": [{
@@ -315,7 +315,6 @@ function detailProject(id) {
             url: `https://localhost:44335/task/getjson`,
             type: 'get'
         }).done((result) => {
-            console.log(result);
             let task =
                 `
                     <label for="Task">Task</label>
@@ -327,16 +326,27 @@ function detailProject(id) {
             let taskList = "";
             for (let i = 0; i < result.data.length; i++) {
                 if (result.data[i].ProjectId == id) {
-                    taskList +=
+                    if (result.data[i].IsCompleted == true) {
+                        taskList +=
+                            `
+                        <li class="list-group-item">
+                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}" checked>
+                            <s>${result.data[i].Name}</s>
+                        </li>
                         `
+                    }
+                    if (result.data[i].IsCompleted == false) {
+                        taskList +=
+                            `
                         <li class="list-group-item">
                             <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}">
                             ${result.data[i].Name}
                         </li>
-                    `
+                        `
+                    }
                 }
-                
-                
+
+
             }
             taskList +=
                 `
@@ -347,47 +357,88 @@ function detailProject(id) {
             $("#listGroup").html(taskList);
 
             for (let i = 0; i < result.data.length; i++) {
-                if ($(`#checkbox${i}`).click(() => {
-                    if ($(`#checkbox${i}`).is(":checked")) {
-                        let check = true;
-                        let obj = {};
-                        obj.TaskId = result.data[i].TaskId;
-                        obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
-                        obj.ProjectId = result.data[i].ProjectId;
-                        obj.CategoryId = result.data[i].CategoryId;
-                        obj.Name = result.data[i].Name;
-                        obj.Description = result.data[i].Description;
-                        obj.DueDate = result.data[i].DueDate;
-                        obj.IsCompleted = check;
-                        console.log(obj);
-                        console.log(obj.DueDate);
-                        $.ajax({
-                            url: "https://localhost:44335/task/editjson",
-                            type: "put",
-                            dataType: "json",
-                            data: obj,
-                            beforeSend: data => {
-                                data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                            },
-                            success: function (data) {
-                                $("#tableProject").DataTable().ajax.reload();
-                                $("#editProject").modal('hide'),
+
+                $(function () {
+                    $(`#checkbox${i}`).on('change', function (e) {
+
+                        if ($(this).is(':checked')) {
+                            let check = true;
+                            let obj = {};
+                            obj.TaskId = result.data[i].TaskId;
+                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
+                            obj.ProjectId = result.data[i].ProjectId;
+                            obj.CategoryId = result.data[i].CategoryId;
+                            obj.Name = result.data[i].Name;
+                            obj.Description = result.data[i].Description;
+                            obj.DueDate = result.data[i].DueDate;
+                            obj.IsCompleted = check;
+                            console.log(obj);
+                            console.log(obj.DueDate);
+                            $.ajax({
+                                url: "https://localhost:44335/task/editjson",
+                                type: "put",
+                                dataType: "json",
+                                data: obj,
+                                beforeSend: data => {
+                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                                },
+                                success: function (data) {
+                                    $("#tableProject").DataTable().ajax.reload();
+                                    $("#modalDetail").modal('hide'),
+                                        swal(
+                                            "Success!",
+                                            `${obj.Name} is done !`,
+                                            "success"
+                                        )
+                                },
+                                failure: function (data) {
                                     swal(
-                                        "Success!",
-                                        `${obj.Name} has been edited`,
-                                        "success"
+                                        "Internal Error",
+                                        "Oops, Product was not saved.",
+                                        "error"
                                     )
-                            },
-                            failure: function (data) {
-                                swal(
-                                    "Internal Error",
-                                    "Oops, Product was not saved.",
-                                    "error"
-                                )
-                            }
-                        });
-                    }
-                }));
+                                }
+                            });
+                        } else {
+                            let check = false;
+                            let obj = {};
+                            obj.TaskId = result.data[i].TaskId;
+                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
+                            obj.ProjectId = result.data[i].ProjectId;
+                            obj.CategoryId = result.data[i].CategoryId;
+                            obj.Name = result.data[i].Name;
+                            obj.Description = result.data[i].Description;
+                            obj.DueDate = result.data[i].DueDate;
+                            obj.IsCompleted = check;
+                            $.ajax({
+                                url: "https://localhost:44335/task/editjson",
+                                type: "put",
+                                dataType: "json",
+                                data: obj,
+                                beforeSend: data => {
+                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                                },
+                                success: function (data) {
+                                    $("#tableProject").DataTable().ajax.reload();
+                                    $("#modalDetail").modal('hide'),
+                                        swal(
+                                            "Success!",
+                                            `${obj.Name} is not done yet !`,
+                                            "success"
+                                        )
+                                },
+                                failure: function (data) {
+                                    swal(
+                                        "Internal Error",
+                                        "Oops, Product was not saved.",
+                                        "error"
+                                    )
+                                }
+                            });
+                        }
+                    });
+                });
+
             }
         })
     });

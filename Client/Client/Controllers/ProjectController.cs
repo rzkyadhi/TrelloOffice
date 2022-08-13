@@ -18,9 +18,6 @@ namespace Client.Controllers
         #region Get
         public IActionResult Index()
         {
-            var result = projectRepository.Get();
-            if (result != null)
-                return View(result);
             return View();
         }
         #endregion Get
