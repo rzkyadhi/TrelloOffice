@@ -420,11 +420,12 @@ function detailProject(id) {
                                 },
                                 success: function (data) {
                                     $("#tableProject").DataTable().ajax.reload();
-                                    $("#detailProject").modal('hide'),
-                                        swal(
-                                            "Success!",
-                                            `${obj.Name} is not done yet !`,
-                                            "success"
+                                    $("#detailProject").modal('hide');
+                                        swal({
+                                            title: "Success!",
+                                            text: `${obj.Name} is not done yet !`,
+                                            timer: 1000
+                                            }
                                         )
                                 },
                                 failure: function (data) {
