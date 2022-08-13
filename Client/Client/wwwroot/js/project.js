@@ -285,6 +285,7 @@ function detailProject(id) {
             `
         <div class="form" id="form-post">
             <div class="col mb-3">
+                <i class='ni ni-bag-17'></i>
                 <label for="projectName">Project Name</label>
                 <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
                     id="projectName" value="${result.data.Name}" readonly required>
@@ -296,6 +297,7 @@ function detailProject(id) {
                 </div>
             </div>
             <div class="col mb-3">
+                <i class='ni ni-align-left-2'></i>
                 <label for="Description">Description</label>
                 <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
                     id="description" value="${result.data.Description}" required>
@@ -317,7 +319,8 @@ function detailProject(id) {
         }).done((result) => {
             let task =
                 `
-                    <label for="Task">Task</label>
+                <i class='ni ni-check-bold'></i>
+                    <label for="Task">Checklist Task</label>
                         <ul class="list-group">
                             <div class="row">
                                 <div class="col" id="listGroup">
