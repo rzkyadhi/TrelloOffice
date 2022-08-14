@@ -427,13 +427,13 @@ function detailProject(id) {
                             let check = true;
                             let obj = {};
                             obj.TaskId = result.data[i].TaskId;
-                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
                             obj.ProjectId = result.data[i].ProjectId;
                             obj.CategoryId = result.data[i].CategoryId;
                             obj.Name = result.data[i].Name;
                             obj.Description = result.data[i].Description;
                             obj.DueDate = result.data[i].DueDate;
                             obj.IsCompleted = check;
+                            console.log(obj);
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
                                 type: "put",
@@ -463,13 +463,13 @@ function detailProject(id) {
                             let check = false;
                             let obj = {};
                             obj.TaskId = result.data[i].TaskId;
-                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
                             obj.ProjectId = result.data[i].ProjectId;
                             obj.CategoryId = result.data[i].CategoryId;
                             obj.Name = result.data[i].Name;
                             obj.Description = result.data[i].Description;
                             obj.DueDate = result.data[i].DueDate;
                             obj.IsCompleted = check;
+                            console.log(obj);
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
                                 type: "put",
