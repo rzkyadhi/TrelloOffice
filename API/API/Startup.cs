@@ -46,6 +46,7 @@ namespace API
             services.AddScoped<AccountRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<TaskRepository>();
+            services.AddScoped<TaskUserRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
