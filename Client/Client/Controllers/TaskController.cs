@@ -103,6 +103,25 @@ namespace Client.Controllers
         }
         #endregion
 
+        #region PostJSON
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostJSON(Task task)
+        {
+            var result = taskRepository.Post(task);
+            if (result == System.Net.HttpStatusCode.Created) return Ok(new
+            {
+                status = result,
+                message = "CREATED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion
+
         #region EditJSON
         [HttpPut]
         [ValidateAntiForgeryToken]

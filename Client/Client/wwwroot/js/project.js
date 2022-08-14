@@ -309,6 +309,8 @@ function detailProject(id) {
             </div>
             <div class="col mb-3" id="taskList">
             </div>
+            <div class="col mb-3" id="addTaskSection">
+            </div>
         </div>               
         `;
         $("#modalDetail").html(detailModalBody);
@@ -369,14 +371,14 @@ function detailProject(id) {
             let progressPercent = "";
             let progressBar = "";
             for (let i = 0; i < result.data.length; i++) {
-                
+
                 if (projectId[i] == id) {
-                    progressPercent += 
-                    `
+                    progressPercent +=
+                        `
                     <span>${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%</span>
                     `
                     progressBar +=
-                    `
+                        `
                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}" aria-valuemin="0" aria-valuemax="100" style="width: ${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%;"></div>
                     `
                 }
@@ -504,6 +506,138 @@ function detailProject(id) {
                 });
 
             }
+
+            let addTaskSection =
+                `
+            <i class='ni ni-fat-add'></i>
+            <label>Add Task</label>
+            <div class="form" id="form-post">
+            <div class="col mb-3">
+                <label for="taskName">Task Name</label>
+                <input name="taskName" type="text" class="form-control form-control-alternative"
+                    id="taskName" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please Input Valid Project Name!
+                </div>
+            </div>
+            <div class="col mb-3">
+                <label for="taskDescription">Task Description</label>
+                <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
+                    id="taskDescription" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please Input Valid Project Name!
+                </div>
+            </div>
+            <div class="col mb-3">
+                <label for="dueDateInput">Due Date</label>
+                <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please Input Valid Description!
+                </div>
+            </div>
+            <button type="button" id="addTaskBtn" class="btn btn-primary">Add Task</button>
+        </div>          
+            `;
+            $("#addTaskSection").html(addTaskSection);
+            // let forms = document.getElementsByClassName("detail-validation");
+
+            // let validation = Array.prototype.filter.call(forms, (form) => {
+            //     form.addEventListener('submit', (event) => {
+            //         if (form.checkValidity() === false) {
+            //             event.preventDefault();
+            //             event.stopPropagation();
+            //         } else {
+            //             event.preventDefault();
+            //             let obj = {};
+            //             obj.name = $("#projectName").val();
+            //             obj.description = $("#description").val();
+            //             swal({
+            //                 title: "Are you sure?",
+            //                 text: `You will add Project : ${obj.name}`,
+            //                 buttons: {
+            //                     cancel: true,
+            //                     confirm: true,
+            //                     closeModal: false
+            //                 },
+            //             }).then((isConfirm) => {
+            //                 if (isConfirm === true) {
+            //                     $.ajax({
+            //                         url: "https://localhost:44335/project/postjson",
+            //                         type: "post",
+            //                         dataType: "json",
+            //                         data: obj,
+            //                         beforeSend: data => {
+            //                             data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+            //                         },
+            //                         success: () => {
+            //                             $("#tableProject").DataTable().ajax.reload();
+            //                             $("#addProject").modal('hide'),
+            //                                 swal(
+            //                                     "Success",
+            //                                     `${obj.name} has been saved`,
+            //                                     "success"
+            //                                 )
+            //                         },
+            //                         failure: () => {
+            //                             swal(
+            //                                 "Internal Server Error",
+            //                                 `Oops, ${obj.name} was not saved`,
+            //                                 "error"
+            //                             )
+            //                         }
+            //                     })
+            //                 }
+            //             })
+            //         }
+            //         form.classList.add('was-validated');
+            //     }, false);
+            // })
+            $("#addTaskBtn").on('click', () => {
+                let obj = {};
+                obj.ProjectId = result.data[id].ProjectId;
+                obj.Name = $("#taskName").val();
+                obj.Description = $("#taskDescription").val();
+                let dueDates = new Date($('#dueDateInput').val());
+                dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
+                obj.DueDate = dueDates;
+                obj.IsCompleted = false;
+                console.log(obj);
+                let result = {};
+                $.ajax({
+                    url: "https://localhost:44335/task/postjson",
+                    type: "post",
+                    dataType: "json",
+                    data: obj,
+                    beforeSend: data => {
+                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                    },
+                    success: function (data) {
+                        $("#tableProject").DataTable().ajax.reload();
+                        $("#detailProject").modal('hide');
+                        swal({
+                            title: "Success!",
+                            text: `${obj.Name} has been added !`,
+                            timer: 1000
+                        });
+                    },
+                    failure: function (data) {
+                        swal(
+                            "Internal Error",
+                            "Oops, Product was not saved.",
+                            "error"
+                        )
+                    }
+                });
+            })
         })
     });
 
