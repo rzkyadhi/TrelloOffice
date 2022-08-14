@@ -33,8 +33,8 @@ namespace Client
                 options.Cookie.IsEssential = true;
             });
             services.AddScoped<ProjectRepository>();
-            services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskRepository>();
+            services.AddScoped<TaskUserRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
             services.AddTokenAuthentication(Configuration);
