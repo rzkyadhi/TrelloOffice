@@ -504,3 +504,5 @@ function detailProject(id) {
     });
 
 }
+
+console.log("This is Session User Id" + $("#sessionUserId").val());
