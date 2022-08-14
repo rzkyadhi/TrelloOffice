@@ -92,7 +92,6 @@ function addProject() {
                 let obj = {};
                 obj.name = $("#projectName").val();
                 obj.description = $("#description").val();
-                console.log(obj);
                 swal({
                     title: "Are you sure?",
                     text: `You will add Project : ${obj.name}`,
@@ -317,15 +316,73 @@ function detailProject(id) {
             url: `https://localhost:44335/task/getjson`,
             type: 'get'
         }).done((result) => {
+            let projectId = [];
+            let hashTaskProject = {};
+            let hashTaskDoneProject = {};
+            for (let i = 0; i < result.data.length; i++) {
+                if (projectId.includes(result.data[i].ProjectId)) {
+                    continue;
+                } else {
+                    projectId.push(result.data[i].ProjectId);
+                }
+            }
+            for (let i = 0; i < projectId.length; i++) {
+                hashTaskProject[projectId[i]] = 0;
+                hashTaskDoneProject[projectId[i]] = 0;
+            }
+            for (let i = 0; i < result.data.length; i++) {
+                if (result.data[i].IsCompleted == true) {
+                    for (let y = 0; y < projectId.length; y++) {
+                        if (Object.keys(hashTaskDoneProject)[y] == result.data[i].ProjectId) {
+                            hashTaskDoneProject[Object.keys(hashTaskDoneProject)[y]] += 1;
+                        }
+                    }
+                }
+                for (let y = 0; y < projectId.length; y++) {
+                    if (Object.keys(hashTaskProject)[y] == result.data[i].ProjectId) {
+                        hashTaskProject[Object.keys(hashTaskProject)[y]] += 1;
+                    }
+                }
+            }
             let task =
                 `
                 <i class='ni ni-check-bold'></i>
                     <label for="Task">Checklist Task</label>
+                    <div class="progress-wrapper">
+                        <div class="progress-info">
+                            <div class="progress-label">
+                            <span>Task completed</span>
+                            </div>
+                            <div class="progress-percentage" id="progressPercent">
+                            
+                            </div>
+                        </div>
+                        <div class="progress" id="progressBar">
+                            
+                        </div>
+                        </div>
                         <ul class="list-group">
                             <div class="row">
                                 <div class="col" id="listGroup">
             `;
             $("#taskList").html(task);
+            let progressPercent = "";
+            let progressBar = "";
+            for (let i = 0; i < result.data.length; i++) {
+                
+                if (projectId[i] == id) {
+                    progressPercent += 
+                    `
+                    <span>${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%</span>
+                    `
+                    progressBar +=
+                    `
+                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}" aria-valuemin="0" aria-valuemax="100" style="width: ${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%;"></div>
+                    `
+                }
+            }
+            $("#progressPercent").html(progressPercent);
+            $("#progressBar").html(progressBar);
             let taskList = "";
             for (let i = 0; i < result.data.length; i++) {
                 if (result.data[i].ProjectId == id) {
@@ -335,6 +392,7 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}" checked>
                             <s>${result.data[i].Name}</s>
+                            <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
                         </li>
                         `
                     }
@@ -344,6 +402,7 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}">
                             ${result.data[i].Name}
+                            <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
                         </li>
                         `
                     }
@@ -375,8 +434,6 @@ function detailProject(id) {
                             obj.Description = result.data[i].Description;
                             obj.DueDate = result.data[i].DueDate;
                             obj.IsCompleted = check;
-                            console.log(obj);
-                            console.log(obj.DueDate);
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
                                 type: "put",
@@ -424,12 +481,11 @@ function detailProject(id) {
                                 success: function (data) {
                                     $("#tableProject").DataTable().ajax.reload();
                                     $("#detailProject").modal('hide');
-                                        swal({
-                                            title: "Success!",
-                                            text: `${obj.Name} is not done yet !`,
-                                            timer: 1000
-                                            }
-                                        )
+                                    swal({
+                                        title: "Success!",
+                                        text: `${obj.Name} is not done yet !`,
+                                        timer: 1000
+                                    })
                                 },
                                 failure: function (data) {
                                     swal(
