@@ -7,12 +7,13 @@ namespace API.Models
     {
         [Key]
         public int RoleUserId { get; set; }
-        public User User { get; set; }
+   
         [ForeignKey("User")]
         public int UserId { get; set; }
-
-        public Role Role { get; set; }
+        public User User { get; set; }
+        
         [ForeignKey("Role")]
         public int RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

@@ -7,8 +7,9 @@ namespace API.Models
     {
         [Key]
         public int RoleUserTaskId { get; set; }
-        public RoleUser RoleUser { get; set; }
+        
         [ForeignKey("RoleUser")]
         public int RoleUserId { get; set; }
+        public RoleUser RoleUser { get; set; }
     }
 }
