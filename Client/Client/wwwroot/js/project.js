@@ -390,9 +390,11 @@ function detailProject(id) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}" checked>
-                            <s>${result.data[i].Name}</s>
-                            <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="checkbox${i}" checked>
+                                <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
+                                <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                            </div>
                         </li>
                         `
                     }
@@ -400,9 +402,11 @@ function detailProject(id) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}">
-                            ${result.data[i].Name}
-                            <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="checkbox${i}">
+                                <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
+                                <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                            </div>
                         </li>
                         `
                     }
