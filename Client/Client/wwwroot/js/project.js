@@ -611,7 +611,6 @@ function detailProject(id) {
                 obj.DueDate = dueDates;
                 obj.IsCompleted = false;
                 console.log(obj);
-                let result = {};
                 $.ajax({
                     url: "https://localhost:44335/task/postjson",
                     type: "post",
