@@ -6,9 +6,7 @@
 	<thead>
 		<tr>
 			<th scope="col">Id</th>
-			<th scope="col">Role User</th>
 			<th scope="col">Project</th>
-			<th scope="col">Category</th>
 			<th scope="col">Task Name</th>
 			<th scope="col">Description</th>
 			<th scope="col">Due Date</th>
@@ -21,9 +19,7 @@
 		{
 			<tr>
 				<td>@Html.DisplayFor(model => item.TaskId)</td>
-				<td>@Html.DisplayFor(model => item.RoleUserTask.RoleUserId)</td>
 				<td>@Html.DisplayFor(model => item.Project.Name)</td>
-				<td>@Html.DisplayFor(model => item.Category.Name)</td>
 				<td>@Html.DisplayFor(model => item.Name)</td>
 				<td>@Html.DisplayFor(model => item.Description)</td>
 				<td>@Html.DisplayFor(model => item.DueDate)</td>

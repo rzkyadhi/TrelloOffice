@@ -1,25 +1,24 @@
 ﻿using API.Context;
 using API.Models;
-using API.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace API.Repositories.Data
 {
-    public class TaskRepository : GenericRepository<Task>
+    public class TaskUserRepository : GenericRepository<TaskUser>
     {
         private readonly MyContext myContext;
 
-        public TaskRepository(MyContext myContext) : base(myContext)
+        public TaskUserRepository(MyContext myContext) : base(myContext)
         {
             this.myContext = myContext;
         }
 
-        public List<Task> Get()
+        public List<TaskUser> Get()
         {
-            var data = myContext.TB_M_TASK
-                .Include(x => x.Project)
+            var data = myContext.TB_M_TASKUSER
+                .Include(x => x.Task)
                 .ToList();
             return data;
         }

@@ -3,6 +3,10 @@
 	@{
 	Layout = "_LayoutDashboard";
 	}
+	@using Microsoft.AspNetCore.Http
+	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+	<input type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetString("UserId")" id="sessionUserId" />
 
 	<div class="container mt-3">
 		<div class="card">

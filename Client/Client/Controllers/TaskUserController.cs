@@ -1,24 +1,22 @@
 ﻿using Client.Models;
 using Client.Repositories.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
-    [Authorize(Roles = "Manager,Employee")]
-    public class TaskController : Controller
+    public class TaskUserController : Controller
     {
-        private readonly TaskRepository taskRepository;
+        private readonly TaskUserRepository taskUserRepository;
 
-        public TaskController(TaskRepository taskRepository)
+        public TaskUserController(TaskUserRepository taskUserRepository)
         {
-            this.taskRepository = taskRepository;
+            this.taskUserRepository = taskUserRepository;
         }
 
         #region Get
         public IActionResult Index()
         {
-            var result = taskRepository.Get();
+            var result = taskUserRepository.Get();
             if (result != null)
                 return View(result);
             return View();
@@ -33,11 +31,11 @@ namespace Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Task task)
+        public IActionResult Create(TaskUser taskUser)
         {
-            var result = taskRepository.Post(task);
+            var result = taskUserRepository.Post(taskUser);
             if (result > 0)
-                return RedirectToAction("Index", "Task");
+                return RedirectToAction("Index", "TaskUser");
             return View();
         }
         #endregion Create
@@ -45,7 +43,7 @@ namespace Client.Controllers
         #region Edit
         public IActionResult Edit(int id)
         {
-            var result = taskRepository.Get(id);
+            var result = taskUserRepository.Get(id);
             if (result != null)
                 return View(result);
             return View();
@@ -53,13 +51,13 @@ namespace Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Task task)
+        public IActionResult Edit(TaskUser taskUser)
         {
             if (ModelState.IsValid)
             {
-                var result = taskRepository.Put(task);
+                var result = taskUserRepository.Put(taskUser);
                 if (result > 0)
-                    return RedirectToAction("Index", "Task");
+                    return RedirectToAction("Index", "TaskUser");
             }
             return View();
         }
@@ -68,7 +66,7 @@ namespace Client.Controllers
         #region Delete
         public IActionResult Delete(int id)
         {
-            var result = taskRepository.Get(id);
+            var result = taskUserRepository.Get(id);
             if (result != null)
                 return View(result);
             return View();
@@ -76,11 +74,11 @@ namespace Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Task task)
+        public IActionResult Delete(TaskUser taskUser)
         {
-            var result = taskRepository.Delete(task);
+            var result = taskUserRepository.Delete(taskUser);
             if (result > 0)
-                return RedirectToAction("Index", "Project");
+                return RedirectToAction("Index", "TaskUser");
             return View();
         }
         #endregion Delete
@@ -88,7 +86,7 @@ namespace Client.Controllers
         #region GetJSON
         public ActionResult GetJSON()
         {
-            var result = taskRepository.Get();
+            var result = taskUserRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -104,11 +102,9 @@ namespace Client.Controllers
         #endregion
 
         #region PostJSON
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PostJSON(Task task)
+        public ActionResult PostJSON(TaskUser taskUser)
         {
-            var result = taskRepository.Post(task);
+            var result = taskUserRepository.Post(taskUser);
             if (result == System.Net.HttpStatusCode.Created) return Ok(new
             {
                 status = result,
@@ -120,14 +116,14 @@ namespace Client.Controllers
                 message = "Bad Request"
             });
         }
-        #endregion
+        #endregion PostJSON
 
         #region EditJSON
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public ActionResult EditJson(Task task)
-        {   
-            var result = taskRepository.Put(task);
+        public ActionResult EditJson(TaskUser taskUser)
+        {
+            var result = taskUserRepository.Put(taskUser);
             if (result == System.Net.HttpStatusCode.OK) return Ok(new
             {
                 status = 200,
@@ -139,6 +135,6 @@ namespace Client.Controllers
                 message = "Bad Request"
             });
         }
-        #endregion DeleteJSON
+        #endregion EditJSON
     }
 }

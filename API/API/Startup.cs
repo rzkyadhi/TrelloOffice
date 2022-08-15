@@ -45,8 +45,8 @@ namespace API
             services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrelloOfficeConnectionString")));
             services.AddScoped<AccountRepository>();
             services.AddScoped<ProjectRepository>();
-            services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskRepository>();
+            services.AddScoped<TaskUserRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

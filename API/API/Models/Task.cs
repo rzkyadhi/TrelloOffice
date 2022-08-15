@@ -8,21 +8,12 @@ namespace API.Models
     {
         [Key]
         public int TaskId { get; set; }
-        public RoleUserTask RoleUserTask { get; set; }
-        [Required]
-        [ForeignKey("RoleUserTask")]
-        public int RoleUserTaskId { get; set; }
         
 
         [Required]
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
         public Project Project { get; set; }
-
-        [Required]
-        [ForeignKey("Category")]
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
 
         [Required]
         public string Name { get; set; }

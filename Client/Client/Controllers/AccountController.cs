@@ -37,7 +37,7 @@ namespace Client.Controllers
                         var tokenOnly = parseObject["token"].ToString();
 
                         var data = JsonConvert.DeserializeObject<Login>(dataOnly);
-                        HttpContext.Session.SetString("Id", data.Id.ToString());
+                        HttpContext.Session.SetString("UserId", data.Id.ToString());
                         HttpContext.Session.SetString("Email", data.Email);
                         HttpContext.Session.SetString("JWToken", tokenOnly);
 
