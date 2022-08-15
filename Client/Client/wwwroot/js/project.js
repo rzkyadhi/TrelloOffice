@@ -318,6 +318,7 @@ function detailProject(id) {
             url: `https://localhost:44335/task/getjson`,
             type: 'get'
         }).done((result) => {
+            console.log(id);
             let projectId = [];
             let hashTaskProject = {};
             let hashTaskDoneProject = {};
@@ -400,7 +401,7 @@ function detailProject(id) {
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
-                                    <button class="btn btn-icon btn-danger btn-sm" type="button">
+                                    <button class="btn btn-icon btn-danger btn-sm" type="button" onclick="deleteTask(${result.data[i].TaskId})">
 	                                    <span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span>
                                     </button>
                                 </div>
@@ -464,7 +465,7 @@ function detailProject(id) {
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
-                                    <button class="btn btn-icon btn-danger btn-sm" type="button">
+                                    <button class="btn btn-icon btn-danger btn-sm" type="button" onclick="deleteTask(${result.data[i].TaskId})">
 	                                    <span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span>
                                     </button>
                                 </div>
@@ -686,16 +687,26 @@ function detailProject(id) {
                         Please Input Valid Description!
                     </div>
                 </div>
-                <button type="button" id="addTaskBtn" class="btn btn-primary">Submit Task</button>
+                <button type="button" class="btn btn-primary" onclick="addTask(${id})">Submit Task</button>
             </div>          
                 </div>
             </div>
             
             `;
             $("#addTaskSection").html(addTaskSection);
-            $("#addTaskBtn").on('click', () => {
+            
+        })
+    });
+}
+
+function addTask(id) {
+    $.ajax({
+        url: `https://localhost:44335/project/getjsonbyid/${id}`,
+        type: 'get'
+    }).done((result) => {
+        console.log(id);
                 let obj = {};
-                obj.ProjectId = result.data[id].ProjectId;
+                obj.ProjectId = result.data.ProjectId;
                 obj.Name = $("#taskAddName").val();
                 obj.Description = $("#taskAddDescription").val();
                 let dueDates = new Date($('#dueDateAddInput').val());
@@ -728,11 +739,60 @@ function detailProject(id) {
                         )
                     }
                 });
-            })
-            
-        })
-    });
+    })
+}
 
+function deleteTask(id) {
+    $.ajax({
+        url: `https://localhost:44335/task/getjsonbyid/${id}`,
+        type: 'get'
+    }).done((result) => {
+        let obj = {};
+        obj.TaskId = result.data.TaskId;
+        obj.ProjectId = result.data.ProjectId;
+        obj.Name = result.data.Name;
+        obj.Description = result.data.Description;
+        obj.DueDate = result.data.DueDate;
+        obj.IsCompleted = result.data.IsCompleted;
+        console.log(obj);
+        swal({
+            title: "Are you sure?",
+            text: `You will delete Task : ${obj.Name}`,
+            buttons: {
+                cancel: true,
+                confirm: true,
+                closeModal: false
+            },
+        }).then(function (isConfirm) {
+            if (isConfirm === true) {
+                $.ajax({
+                    url: "https://localhost:44335/task/deletejson",
+                    type: "delete",
+                    dataType: "json",
+                    data: obj,
+                    beforeSend: data => {
+                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                    },
+                    success: function (data) {
+                        $("#tableProject").DataTable().ajax.reload();
+                        $("#detailProject").modal('hide');
+                        swal(
+                            "Success!",
+                            `${obj.Name} has been deleted !`,
+                            "success"
+                        )
+                    },
+                    failure: function (data) {
+                        swal(
+                            "Internal Error",
+                            "Oops, Product was not saved.",
+                            "error"
+                        )
+                    }
+                });
+            }
+        })
+    })
 }
 
 console.log("This is Session User Id" + $("#sessionUserId").val());
