@@ -509,43 +509,47 @@ function detailProject(id) {
 
             let addTaskSection =
                 `
-            <i class='ni ni-fat-add'></i>
-            <label>Add Task</label>
-            <div class="form" id="form-post">
-            <div class="col mb-3">
-                <label for="taskName">Task Name</label>
-                <input name="taskName" type="text" class="form-control form-control-alternative"
-                    id="taskName" required>
-                <div class="valid-feedback">
-                    Looks good!
+            <button class='btn btn-primary' type="button" data-toggle="collapse" data-target="#collapseAddTask" aria-expanded="false" aria-controls="collapseAddTask"><i class='ni ni-fat-add'></i>Add Task</button>
+            <div class="collapse" id="collapseAddTask">
+                <div class="card card-body">
+                <div class="form" id="form-post">
+                <div class="col mb-3">
+                    <label for="taskName">Task Name</label>
+                    <input name="taskName" type="text" class="form-control form-control-alternative"
+                        id="taskName" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please Input Valid Project Name!
+                    </div>
                 </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Project Name!
+                <div class="col mb-3">
+                    <label for="taskDescription">Task Description</label>
+                    <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
+                        id="taskDescription" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please Input Valid Project Name!
+                    </div>
+                </div>
+                <div class="col mb-3">
+                    <label for="dueDateInput">Due Date</label>
+                    <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please Input Valid Description!
+                    </div>
+                </div>
+                <button type="button" id="addTaskBtn" class="btn btn-primary">Submit Task</button>
+            </div>          
                 </div>
             </div>
-            <div class="col mb-3">
-                <label for="taskDescription">Task Description</label>
-                <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
-                    id="taskDescription" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Project Name!
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label for="dueDateInput">Due Date</label>
-                <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Description!
-                </div>
-            </div>
-            <button type="button" id="addTaskBtn" class="btn btn-primary">Add Task</button>
-        </div>          
+            
             `;
             $("#addTaskSection").html(addTaskSection);
             // let forms = document.getElementsByClassName("detail-validation");
