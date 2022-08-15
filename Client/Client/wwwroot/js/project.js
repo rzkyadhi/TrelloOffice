@@ -398,6 +398,9 @@ function detailProject(id) {
                                 <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
+                                        Assign Task
+                                    </button>
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
@@ -448,6 +451,11 @@ function detailProject(id) {
                                     <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
                                 </div>          
                                     </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="collapse" id="collapseAssign${i}">
+                                
                                 </div>
                             </div> 
                         </li>
@@ -514,11 +522,11 @@ function detailProject(id) {
                             </li>
                         `
                     }
-                    
+
                 }
-                
+
             }
-            
+
             taskList +=
                 `
                     </div>
@@ -694,7 +702,7 @@ function detailProject(id) {
             
             `;
             $("#addTaskSection").html(addTaskSection);
-            
+
         })
     });
 }
@@ -705,40 +713,40 @@ function addTask(id) {
         type: 'get'
     }).done((result) => {
         console.log(id);
-                let obj = {};
-                obj.ProjectId = result.data.ProjectId;
-                obj.Name = $("#taskAddName").val();
-                obj.Description = $("#taskAddDescription").val();
-                let dueDates = new Date($('#dueDateAddInput').val());
-                dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
-                obj.DueDate = dueDates;
-                obj.IsCompleted = false;
-                console.log(obj);
-                $.ajax({
-                    url: "https://localhost:44335/task/postjson",
-                    type: "post",
-                    dataType: "json",
-                    data: obj,
-                    beforeSend: data => {
-                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                    },
-                    success: function (data) {
-                        $("#tableProject").DataTable().ajax.reload();
-                        $("#detailProject").modal('hide');
-                        swal({
-                            title: "Success!",
-                            text: `${obj.Name} has been added !`,
-                            timer: 1000
-                        });
-                    },
-                    failure: function (data) {
-                        swal(
-                            "Internal Error",
-                            "Oops, Product was not saved.",
-                            "error"
-                        )
-                    }
+        let obj = {};
+        obj.ProjectId = result.data.ProjectId;
+        obj.Name = $("#taskAddName").val();
+        obj.Description = $("#taskAddDescription").val();
+        let dueDates = new Date($('#dueDateAddInput').val());
+        dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
+        obj.DueDate = dueDates;
+        obj.IsCompleted = false;
+        console.log(obj);
+        $.ajax({
+            url: "https://localhost:44335/task/postjson",
+            type: "post",
+            dataType: "json",
+            data: obj,
+            beforeSend: data => {
+                data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+            },
+            success: function (data) {
+                $("#tableProject").DataTable().ajax.reload();
+                $("#detailProject").modal('hide');
+                swal({
+                    title: "Success!",
+                    text: `${obj.Name} has been added !`,
+                    timer: 1000
                 });
+            },
+            failure: function (data) {
+                swal(
+                    "Internal Error",
+                    "Oops, Product was not saved.",
+                    "error"
+                )
+            }
+        });
     })
 }
 
@@ -794,5 +802,118 @@ function deleteTask(id) {
         })
     })
 }
+
+function assignTask(id) {
+    $.ajax({
+        url: `https://localhost:44335/task/getjson`,
+        type: 'get'
+    }).done((result) => {
+        const dataOption = result.data.length;
+        const user = {};
+        const optionName = {};
+        for (let i = 0; i < dataOption; i++) {
+            let assignTask =
+                `
+        <div class="card card-body">
+            <div class="form" id="form-post">
+                <input value="${id}" hidden/>
+                <div class="col mb-3">
+                    <label for="UserId">Email | Username</label>
+                    <select class="custom-select form-control-alternative" id="UserId${i}" required>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a valid supplier.
+                    </div>
+                </div>
+                <div class="col mb-3">
+                    <button type="button" class="btn btn-success" id="assignTaskBtn${i}">Assign Task</button>
+                </div>
+            </div>
+        </div>
+        `
+            $(`#collapseAssign${i}`).html(assignTask);
+        }
+        
+        for (let i = 0; i < dataOption; i++) {
+            $.ajax({
+                url: `https://localhost:44335/user/getjson`,
+                type: 'get'
+            }).done((result) => {
+                
+                let option = "";
+                option +=
+                    `
+                <option selected disabled value="">Choose User or Employee..</option>
+                `
+                $.each(result.data, (key, val) => {
+                    option +=
+                        `
+                    <option value=${val.UserId}>${val.Email} | ${val.Username}</option>
+                    `;
+                    user[val.Email] = val.UserId;
+                })
+                $(`#UserId${i}`).html(option);
+            })
+        }
+        $.ajax({
+            url: `https://localhost:44335/task/getjson`,
+            type: 'get'
+        }).done((result) => {
+            for (let i = 0; i < result.data.length; i++) {
+                optionName[i] = document.getElementById(`UserId${i}`);
+            }
+            for (let i = 0; i < result.data.length; i++) {
+                $(`#assignTaskBtn${i}`).on('click', () => {
+                    let options = Object.values(optionName)[i];
+                    let value = options.options[options.selectedIndex].value;
+                    
+                    let obj = {};
+                    obj.TaskId = parseInt(id);
+                    obj.UserId = parseInt(value);
+                    console.log(obj);
+
+                    swal({
+                        title: "Are you sure?",
+                        text: `You will assign task`,
+                        buttons: {
+                            cancel: true,
+                            confirm: true,
+                            closeModal: false
+                        },
+                    }).then(function (isConfirm) {
+                        if (isConfirm === true) {
+                            $.ajax({
+                                url: "https://localhost:44335/taskuser/postjson",
+                                type: "post",
+                                dataType: "json",
+                                data: obj,
+                                beforeSend: data => {
+                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                                },
+                                success: function (data) {
+                                    $("#tableProject").DataTable().ajax.reload();
+                                    $("#detailProject").modal('hide'),
+                                        swal(
+                                            "Success!",
+                                            `Task has been assigned`,
+                                            "success"
+                                        )
+                                },
+                                failure: function (data) {
+                                    swal(
+                                        "Internal Error",
+                                        "Oops, Product was not saved.",
+                                        "error"
+                                    )
+                                }
+                            });
+                        }
+                    })
+                })
+            }
+        })
+    })
+}
+
 
 console.log("This is Session User Id" + $("#sessionUserId").val());
