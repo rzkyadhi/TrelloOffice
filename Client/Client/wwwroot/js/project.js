@@ -392,11 +392,63 @@ function detailProject(id) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <div class="custom-control custom-checkbox">
+                            <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}" checked>
                                 <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
-                                <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                                <div class="ml-auto">
+                                    <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
+                                        Edit Task
+                                    </button>
+                                    <button class="btn btn-icon btn-danger btn-sm" type="button">
+	                                    <span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span>
+                                    </button>
+                                </div>
                             </div>
+                            <div>
+                                <div class="collapse" id="collapseExample${i}">
+                                    <div class="card card-body">
+                                    <div class="form" id="form-post">
+                                    <input name="taskId" type="number" class="form-control form-control-alternative"
+                                            id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
+                                    <div class="col mb-3">
+                                        <label for="taskName">Task Name</label>
+                                        <input name="taskName" type="text" class="form-control form-control-alternative"
+                                            id="taskName${i}" value="${result.data[i].Name}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="taskDescription">Task Description</label>
+                                        <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
+                                            id="taskDescription${i}" value="${result.data[i].Description}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="dueDateInput">Due Date</label>
+                                        <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
+                                            id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Description!
+                                        </div>
+                                    </div>
+                                    <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
+                                </div>          
+                                    </div>
+                                </div>
+                            </div> 
                         </li>
                         `
                     }
@@ -404,18 +456,68 @@ function detailProject(id) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <div class="custom-control custom-checkbox">
+                            <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}">
                                 <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
-                                <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                                <div class="ml-auto">
+                                    <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
+                                        Edit Task
+                                    </button>
+                                    <button class="btn btn-icon btn-danger btn-sm" type="button">
+	                                    <span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span>
+                                    </button>
+                                </div>
                             </div>
-                        </li>
+                            <div>
+                                <div class="collapse" id="collapseExample${i}">
+                                    <div class="card card-body">
+                                        <div class="form" id="form-post">
+                                            <input name="taskId" type="number" class="form-control form-control-alternative"
+                                                id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
+                                            <div class="col mb-3">
+                                            <label for="taskName">Task Name</label>
+                                            <input name="taskName" type="text" class="form-control form-control-alternative"
+                                                id="taskName${i}" value="${result.data[i].Name}" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please Input Valid Project Name!
+                                            </div>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="taskDescription">Task Description</label>
+                                            <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
+                                                id="taskDescription${i}" value="${result.data[i].Description}" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please Input Valid Project Name!
+                                            </div>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="dueDateInput">Due Date</label>
+                                            <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please Input Valid Description!
+                                            </div>
+                                        </div>
+                                        <button type="button" id="editTaskBtn${i}" class="btn btn-primary">Edit Task</button>
+                                    </div>          
+                                </div>
+                            </li>
                         `
                     }
+                    
                 }
-
-
+                
             }
+            
             taskList +=
                 `
                     </div>
@@ -423,6 +525,45 @@ function detailProject(id) {
             </ul>   
             `
             $("#listGroup").html(taskList);
+            for (let i = 0; i < result.data.length; i++) {
+                $(`#editTaskBtn${i}`).on('click', () => {
+                    let obj = {};
+                    obj.TaskId = parseInt($(`#taskId${i}`).val());
+                    obj.ProjectId = result.data[id].ProjectId;
+                    obj.Name = $(`#taskName${i}`).val();
+                    obj.Description = $(`#taskDescription${i}`).val();
+                    let dueDates = new Date($(`#dueDateInput${i}`).val());
+                    dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
+                    obj.DueDate = dueDates;
+                    obj.IsCompleted = false;
+                    console.log(obj);
+                    $.ajax({
+                        url: "https://localhost:44335/task/editjson",
+                        type: "put",
+                        dataType: "json",
+                        data: obj,
+                        beforeSend: data => {
+                            data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                        },
+                        success: function (data) {
+                            $("#tableProject").DataTable().ajax.reload();
+                            $("#detailProject").modal('hide');
+                            swal({
+                                title: "Success!",
+                                text: `${obj.Name} has been edited !`,
+                                timer: 1000
+                            });
+                        },
+                        failure: function (data) {
+                            swal(
+                                "Internal Error",
+                                "Oops, Product was not saved.",
+                                "error"
+                            )
+                        }
+                    });
+                })
+            }
 
             for (let i = 0; i < result.data.length; i++) {
 
@@ -514,9 +655,9 @@ function detailProject(id) {
                 <div class="card card-body">
                 <div class="form" id="form-post">
                 <div class="col mb-3">
-                    <label for="taskName">Task Name</label>
-                    <input name="taskName" type="text" class="form-control form-control-alternative"
-                        id="taskName" required>
+                    <label for="taskAddName">Task Name</label>
+                    <input name="taskAddName" type="text" class="form-control form-control-alternative"
+                        id="taskAddName" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -525,9 +666,9 @@ function detailProject(id) {
                     </div>
                 </div>
                 <div class="col mb-3">
-                    <label for="taskDescription">Task Description</label>
-                    <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
-                        id="taskDescription" required>
+                    <label for="taskAddDescription">Task Description</label>
+                    <input name="taskAddDescription" type="textarea" class="form-control form-control-alternative"
+                        id="taskAddDescription" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -536,8 +677,8 @@ function detailProject(id) {
                     </div>
                 </div>
                 <div class="col mb-3">
-                    <label for="dueDateInput">Due Date</label>
-                    <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput" required>
+                    <label for="dueDateAddInput">Due Date</label>
+                    <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -552,65 +693,12 @@ function detailProject(id) {
             
             `;
             $("#addTaskSection").html(addTaskSection);
-            // let forms = document.getElementsByClassName("detail-validation");
-
-            // let validation = Array.prototype.filter.call(forms, (form) => {
-            //     form.addEventListener('submit', (event) => {
-            //         if (form.checkValidity() === false) {
-            //             event.preventDefault();
-            //             event.stopPropagation();
-            //         } else {
-            //             event.preventDefault();
-            //             let obj = {};
-            //             obj.name = $("#projectName").val();
-            //             obj.description = $("#description").val();
-            //             swal({
-            //                 title: "Are you sure?",
-            //                 text: `You will add Project : ${obj.name}`,
-            //                 buttons: {
-            //                     cancel: true,
-            //                     confirm: true,
-            //                     closeModal: false
-            //                 },
-            //             }).then((isConfirm) => {
-            //                 if (isConfirm === true) {
-            //                     $.ajax({
-            //                         url: "https://localhost:44335/project/postjson",
-            //                         type: "post",
-            //                         dataType: "json",
-            //                         data: obj,
-            //                         beforeSend: data => {
-            //                             data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-            //                         },
-            //                         success: () => {
-            //                             $("#tableProject").DataTable().ajax.reload();
-            //                             $("#addProject").modal('hide'),
-            //                                 swal(
-            //                                     "Success",
-            //                                     `${obj.name} has been saved`,
-            //                                     "success"
-            //                                 )
-            //                         },
-            //                         failure: () => {
-            //                             swal(
-            //                                 "Internal Server Error",
-            //                                 `Oops, ${obj.name} was not saved`,
-            //                                 "error"
-            //                             )
-            //                         }
-            //                     })
-            //                 }
-            //             })
-            //         }
-            //         form.classList.add('was-validated');
-            //     }, false);
-            // })
             $("#addTaskBtn").on('click', () => {
                 let obj = {};
                 obj.ProjectId = result.data[id].ProjectId;
-                obj.Name = $("#taskName").val();
-                obj.Description = $("#taskDescription").val();
-                let dueDates = new Date($('#dueDateInput').val());
+                obj.Name = $("#taskAddName").val();
+                obj.Description = $("#taskAddDescription").val();
+                let dueDates = new Date($('#dueDateAddInput').val());
                 dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
                 obj.DueDate = dueDates;
                 obj.IsCompleted = false;
@@ -641,6 +729,7 @@ function detailProject(id) {
                     }
                 });
             })
+            
         })
     });
 
