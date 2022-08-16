@@ -59,30 +59,27 @@
 		</div>
 	</div>
 
-	<!-- ModalEdit -->
-	<div class="modal fade" id="editTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+	<!-- ModalDetails -->
+	<div class="modal fade" id="detailTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Edit Project</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Detail Task</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				@Html.AntiForgeryToken()
-				<form class="edit-validation" novalidate>
-					<div class="modal-body" id="modalEdit">
+				<form class="detail-validation" novalidate>
+					<div class="modal-body" id="modalDetail">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button id="editBtn" class="btn btn-warning" type="submit">Edit</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-
-
 
 	@section Scripts{
 	<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>

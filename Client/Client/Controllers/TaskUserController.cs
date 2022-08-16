@@ -1,9 +1,11 @@
 ﻿using Client.Models;
 using Client.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize]
     public class TaskUserController : Controller
     {
         private readonly TaskUserRepository taskUserRepository;
@@ -101,6 +103,23 @@ namespace Client.Controllers
         }
         #endregion
 
+        #region GetJSONId
+        public ActionResult GetJSONById(int id)
+        {
+            var result = taskUserRepository.Get(id);
+            if (result != null) return Ok(new
+            {
+                status = 200,
+                message = "SUCCESS",
+                data = result
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "BAD REQUEST"
+            });
+        }
+        #endregion GetJSONId
         #region PostJSON
         public ActionResult PostJSON(TaskUser taskUser)
         {
