@@ -467,9 +467,12 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}">
-                                <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
+                                <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
+                                        Assign Task
+                                    </button>
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
@@ -481,45 +484,53 @@ function detailProject(id) {
                             <div>
                                 <div class="collapse" id="collapseExample${i}">
                                     <div class="card card-body">
-                                        <div class="form" id="form-post">
-                                            <input name="taskId" type="number" class="form-control form-control-alternative"
-                                                id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
-                                            <div class="col mb-3">
-                                            <label for="taskName">Task Name</label>
-                                            <input name="taskName" type="text" class="form-control form-control-alternative"
-                                                id="taskName${i}" value="${result.data[i].Name}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Project Name!
-                                            </div>
+                                    <div class="form" id="form-post">
+                                    <input name="taskId" type="number" class="form-control form-control-alternative"
+                                            id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
+                                    <div class="col mb-3">
+                                        <label for="taskName">Task Name</label>
+                                        <input name="taskName" type="text" class="form-control form-control-alternative"
+                                            id="taskName${i}" value="${result.data[i].Name}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
                                         </div>
-                                        <div class="col mb-3">
-                                            <label for="taskDescription">Task Description</label>
-                                            <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
-                                                id="taskDescription${i}" value="${result.data[i].Description}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Project Name!
-                                            </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
                                         </div>
-                                        <div class="col mb-3">
-                                            <label for="dueDateInput">Due Date</label>
-                                            <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Description!
-                                            </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="taskDescription">Task Description</label>
+                                        <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
+                                            id="taskDescription${i}" value="${result.data[i].Description}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
                                         </div>
-                                        <button type="button" id="editTaskBtn${i}" class="btn btn-primary">Edit Task</button>
-                                    </div>          
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="dueDateInput">Due Date</label>
+                                        <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
+                                            id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Description!
+                                        </div>
+                                    </div>
+                                    <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
+                                </div>          
+                                    </div>
                                 </div>
-                            </li>
+                            </div>
+                            <div>
+                                <div class="collapse" id="collapseAssign${i}">
+                                
+                                </div>
+                            </div> 
+                        </li>
                         `
                     }
 
