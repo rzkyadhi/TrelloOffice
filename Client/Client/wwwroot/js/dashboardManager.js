@@ -106,3 +106,43 @@ $.ajax({
         configBar
     );
 })
+
+$(document).ready(() => {
+    let table = $('#tableEmployeeAccountList').DataTable({
+        "language": {
+            "paginate": {
+                "previous": "<i class='ni ni-bold-left'></i>",
+                "next": "<i class='ni ni-bold-right'></i>"
+            }
+        },
+        columnDefs: [{
+                orderable: false,
+                targets: -1
+            },
+            {
+                className: 'text-center',
+                targets: [0, 1, 2, 3]
+            }
+        ],
+        "ajax": {
+            "url": "https://localhost:44335/User/GetJSON",
+            "dataType": "json",
+        },
+        "columns": [{
+                "data": "UserId",
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {
+                "data": "employee.Name"
+            },
+            {
+                "data": "Email"
+            },
+            {
+                "data": "Username"
+            }
+        ],
+    })
+})

@@ -282,36 +282,30 @@ function detailProject(id) {
     }).done((result) => {
         let detailModalBody =
             `
-        <div class="form" id="form-post">
-            <div class="col mb-3">
-                <i class='ni ni-bag-17'></i>
-                <label for="projectName">Project Name</label>
-                <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
-                    id="projectName" value="${result.data.Name}" readonly required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Project Name!
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title"><i class='ni ni-bag-17'></i> Project Name</h2>
+                    ${result.data.Name}
                 </div>
             </div>
-            <div class="col mb-3">
-                <i class='ni ni-align-left-2'></i>
-                <label for="Description">Description</label>
-                <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
-                    id="description" value="${result.data.Description}" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Description!
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title"><i class='ni ni-align-left-2'></i> Description</h2>
+                    ${result.data.Description}
                 </div>
             </div>
-            <div class="col mb-3" id="taskList">
-            </div>
-            <div class="col mb-3" id="addTaskSection">
-            </div>
-        </div>               
+            <div class="form" id="form-post">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title"><i class='ni ni-check-bold'></i> Checklist Task</h2>
+                        <div class="col mb-3" id="taskList">
+                        </div>
+                        <div class="col mb-3" id="addTaskSection">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>               
         `;
         $("#modalDetail").html(detailModalBody);
         $.ajax({
@@ -349,8 +343,6 @@ function detailProject(id) {
             }
             let task =
                 `
-                <i class='ni ni-check-bold'></i>
-                    <label for="Task">Checklist Task</label>
                     <div class="progress-wrapper">
                         <div class="progress-info">
                             <div class="progress-label">
