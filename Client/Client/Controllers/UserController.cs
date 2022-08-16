@@ -1,8 +1,10 @@
 ﻿using Client.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class UserController : Controller
     {
         private readonly UserRepository userRepository;
