@@ -1,28 +1,34 @@
 $(document).ready(() => {
-    $.ajax({
-        url: 'https://localhost:44335/taskuser/getjson',
-        type: 'get'
-    }).done((result) => {
-        let filteredData = [];
-        for (let i = 0; i < result.data.length; i++) {
-            if (result.data[i].UserId == $("#sessionUserId").val()) {
-                filteredData.push(result.data[i]);
+    let table = $('#tableTask').DataTable({
+        "ajax": {
+            "url": "https://localhost:44335/taskuser/GetJSON",
+            "dataSrc": function (json) {
+                let jsonFiltered = [];
+                for (let i = 0; i < json.data.length; i++) {
+                    if (json.data[i].UserId == $("#sessionUserId").val()) {
+                        jsonFiltered.push(json.data[i]);
+                    }
+                }
+                return jsonFiltered;
+            },
+        },
+        "columns": [{
+                "data": "UserId",
+            },
+            {
+                "data": "task.Name"
+            },
+            {
+                "data": "task.Description"
+            },
+            {
+                "data": "task.DueDate"
+            },
+            {
+                "data": "task.IsCompleted"
             }
-        }
-        console.log(filteredData);
-        
-        let table = $('#tableTask').DataTable({
-            data: filteredData,
-            columns: [
-                { data: 'UserId' },
-                { data: 'task.Name' },
-                { data: 'task.Description' },
-                { data: 'task.DueDate' },
-                { data: 'task.IsCompleted' }
-            ]
-        })
+        ],
     })
-
 
 
 })
