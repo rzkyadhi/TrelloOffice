@@ -20,6 +20,10 @@ $.ajax({
     for (let i = 0; i < result.data.length; i++) {
         dueDate.push(result.data[i].DueDate)
     }
+
+    console.log(dueDate);
+    console.log("This is Due Date Length" + dueDate.length);
+    
     
 
     //Pushing into HashMap
@@ -27,13 +31,16 @@ $.ajax({
         if (Object.keys(hashMap).length == 0) {
             hashMap[dueDate[i]] = 1;
             i++;
+            if (i == dueDate.length) break;
         }
         if (dueDate[i] in hashMap) {
             hashMap[dueDate[i]] = hashMap[dueDate[i]] + 1;
         }
         if (dueDate[i] in hashMap == false) {
             hashMap[dueDate[i]] = 1;
+            console.log("This is if 3");
         }
+        
     }
     let backgroundClr = []
     for (let i = 0; i < result.data.length; i++) {
@@ -45,6 +52,7 @@ $.ajax({
         }
     }
     console.log(backgroundClr);
+    console.log(hashMap);
 
     let dataBar = {
         labels: Object.keys(hashMap),
@@ -97,4 +105,44 @@ $.ajax({
         document.getElementById('barChart'),
         configBar
     );
+})
+
+$(document).ready(() => {
+    let table = $('#tableEmployeeAccountList').DataTable({
+        "language": {
+            "paginate": {
+                "previous": "<i class='ni ni-bold-left'></i>",
+                "next": "<i class='ni ni-bold-right'></i>"
+            }
+        },
+        columnDefs: [{
+                orderable: false,
+                targets: -1
+            },
+            {
+                className: 'text-center',
+                targets: [0, 1, 2, 3]
+            }
+        ],
+        "ajax": {
+            "url": "https://localhost:44335/User/GetJSON",
+            "dataType": "json",
+        },
+        "columns": [{
+                "data": "UserId",
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {
+                "data": "employee.Name"
+            },
+            {
+                "data": "Email"
+            },
+            {
+                "data": "Username"
+            }
+        ],
+    })
 })

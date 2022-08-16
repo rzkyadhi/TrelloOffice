@@ -44,6 +44,7 @@ namespace API
             services.AddControllers();
             services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrelloOfficeConnectionString")));
             services.AddScoped<AccountRepository>();
+            services.AddScoped<UserRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<TaskRepository>();
             services.AddScoped<TaskUserRepository>();

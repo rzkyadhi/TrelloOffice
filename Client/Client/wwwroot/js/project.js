@@ -54,9 +54,9 @@ $(document).ready(() => {
 function addProject() {
     let createModalBody =
         `
-        <div class="form-row" id="form-post">
-            <div class="col-md-6 mb-3">
-                <label for="projectName">Project Name</label>
+        <div class="form" id="form-post">
+            <div class="col mb-3">
+                <label for="projectName" class="form-control-label">Project Name</label>
                 <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
                     id="projectName" required>
                 <div class="valid-feedback">
@@ -66,10 +66,9 @@ function addProject() {
                     Please Input Valid Project Name!
                 </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="Description">Description</label>
-                <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
-                    id="description" required>
+            <div class="col mb-3">
+                <label for="Description" class="form-control-label">Description</label>
+                <textarea class="form-control" id="description" aria-label="Description" required></textarea>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -142,27 +141,20 @@ function editProject(id) {
     }).done((result) => {
         let editModalBody =
             `
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                    <label for="projectId">Project Id</label>
-                    <input name="projectId" type="number" class="form-control form-control-alternative"
-                        id="projectId" value=${result.data.ProjectId} readonly required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-            <div class="col-md-4 mb-3">
-                <label for="name">Project Name</label>
+        <div class="form">
+            <input name="projectId" type="number" class="form-control form-control-alternative"
+                id="projectId" value=${result.data.ProjectId} hidden required>
+            <div class="col mb-3">
+                <label for="name" class="form-control-label">Project Name</label>
                 <input id="name" type="text" class="form-control form-control-alternative"
                          value="${result.data['Name']}" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="description">Description</label>
-                <input id="description" type="text" class="form-control form-control-alternative"
-                         value="${result.data['Description']}" required>
+            <div class="col mb-3">
+                <label for="description" class="form-control-label">Description</label>
+                <textarea class="form-control" id="description" aria-label="description" required>${result.data['Description']}</textarea>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -282,36 +274,30 @@ function detailProject(id) {
     }).done((result) => {
         let detailModalBody =
             `
-        <div class="form" id="form-post">
-            <div class="col mb-3">
-                <i class='ni ni-bag-17'></i>
-                <label for="projectName">Project Name</label>
-                <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
-                    id="projectName" value="${result.data.Name}" readonly required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Project Name!
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title"><i class='ni ni-bag-17'></i> Project Name</h2>
+                    ${result.data.Name}
                 </div>
             </div>
-            <div class="col mb-3">
-                <i class='ni ni-align-left-2'></i>
-                <label for="Description">Description</label>
-                <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
-                    id="description" value="${result.data.Description}" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Description!
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title"><i class='ni ni-align-left-2'></i> Description</h2>
+                    ${result.data.Description}
                 </div>
             </div>
-            <div class="col mb-3" id="taskList">
-            </div>
-            <div class="col mb-3" id="addTaskSection">
-            </div>
-        </div>               
+            <div class="form" id="form-post">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title"><i class='ni ni-check-bold'></i> Checklist Task</h2>
+                        <div class="col mb-3" id="taskList">
+                        </div>
+                        <div class="col mb-3" id="addTaskSection">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>               
         `;
         $("#modalDetail").html(detailModalBody);
         $.ajax({
@@ -349,8 +335,6 @@ function detailProject(id) {
             }
             let task =
                 `
-                <i class='ni ni-check-bold'></i>
-                    <label for="Task">Checklist Task</label>
                     <div class="progress-wrapper">
                         <div class="progress-info">
                             <div class="progress-label">
@@ -398,6 +382,9 @@ function detailProject(id) {
                                 <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
+                                        Assign Task
+                                    </button>
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
@@ -406,14 +393,14 @@ function detailProject(id) {
                                     </button>
                                 </div>
                             </div>
-                            <div>
+                            <div class="mt-3">
                                 <div class="collapse" id="collapseExample${i}">
                                     <div class="card card-body">
                                     <div class="form" id="form-post">
                                     <input name="taskId" type="number" class="form-control form-control-alternative"
                                             id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
                                     <div class="col mb-3">
-                                        <label for="taskName">Task Name</label>
+                                        <label class="form-control-label" for="taskName">Task Name</label>
                                         <input name="taskName" type="text" class="form-control form-control-alternative"
                                             id="taskName${i}" value="${result.data[i].Name}" required>
                                         <div class="valid-feedback">
@@ -424,9 +411,8 @@ function detailProject(id) {
                                         </div>
                                     </div>
                                     <div class="col mb-3">
-                                        <label for="taskDescription">Task Description</label>
-                                        <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
-                                            id="taskDescription${i}" value="${result.data[i].Description}" required>
+                                        <label class="form-control-label" for="taskDescription">Task Description</label>
+                                        <textarea class="form-control" id="taskDescription${i}" aria-label="taskDescription" required>${result.data[i].Description}</textarea>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -435,7 +421,7 @@ function detailProject(id) {
                                         </div>
                                     </div>
                                     <div class="col mb-3">
-                                        <label for="dueDateInput">Due Date</label>
+                                        <label class="form-control-label" for="dueDateInput">Due Date</label>
                                         <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
                                             id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
                                         <div class="valid-feedback">
@@ -445,9 +431,16 @@ function detailProject(id) {
                                             Please Input Valid Description!
                                         </div>
                                     </div>
-                                    <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
+                                    <div class="col mb-3">
+                                        <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
+                                    </div>
                                 </div>          
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="collapse" id="collapseAssign${i}">
+                                
                                 </div>
                             </div> 
                         </li>
@@ -459,9 +452,12 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}">
-                                <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
+                                <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                                    <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
+                                        Assign Task
+                                    </button>
                                     <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">
                                         Edit Task
                                     </button>
@@ -470,55 +466,64 @@ function detailProject(id) {
                                     </button>
                                 </div>
                             </div>
-                            <div>
+                            <div class="mt-3">
                                 <div class="collapse" id="collapseExample${i}">
                                     <div class="card card-body">
-                                        <div class="form" id="form-post">
-                                            <input name="taskId" type="number" class="form-control form-control-alternative"
-                                                id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
-                                            <div class="col mb-3">
-                                            <label for="taskName">Task Name</label>
-                                            <input name="taskName" type="text" class="form-control form-control-alternative"
-                                                id="taskName${i}" value="${result.data[i].Name}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Project Name!
-                                            </div>
+                                    <div class="form" id="form-post">
+                                    <input name="taskId" type="number" class="form-control form-control-alternative"
+                                            id="taskId${i}" value="${result.data[i].TaskId}" hidden required>
+                                    <div class="col mb-3">
+                                        <label class="form-control-label" for="taskName">Task Name</label>
+                                        <input name="taskName" type="text" class="form-control form-control-alternative"
+                                            id="taskName${i}" value="${result.data[i].Name}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
                                         </div>
-                                        <div class="col mb-3">
-                                            <label for="taskDescription">Task Description</label>
-                                            <input name="taskDescription" type="textarea" class="form-control form-control-alternative"
-                                                id="taskDescription${i}" value="${result.data[i].Description}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Project Name!
-                                            </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
                                         </div>
-                                        <div class="col mb-3">
-                                            <label for="dueDateInput">Due Date</label>
-                                            <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                Please Input Valid Description!
-                                            </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-control-label" for="taskDescription">Task Description</label>
+                                        <textarea class="form-control" id="taskDescription${i}" aria-label="taskDescription" required>${result.data[i].Description}</textarea>
+                                        <div class="valid-feedback">
+                                            Looks good!
                                         </div>
-                                        <button type="button" id="editTaskBtn${i}" class="btn btn-primary">Edit Task</button>
-                                    </div>          
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Project Name!
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-control-label" for="dueDateInput">Due Date</label>
+                                        <input class="form-control form-control-alternative" name="dueDateInput" placeholder="Select date" type="date" 
+                                            id="dueDateInput${i}" value="${result.data[i].DueDate}" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please Input Valid Description!
+                                        </div>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <button type="button" id="editTaskBtn${i}" class="btn btn-warning">Edit Task</button>
+                                    </div>
+                                </div>          
+                                    </div>
                                 </div>
-                            </li>
+                            </div>
+                            <div class="mt-3">
+                                <div class="collapse" id="collapseAssign${i}">
+                                
+                                </div>
+                            </div> 
+                        </li>
                         `
                     }
-                    
+
                 }
-                
+
             }
-            
+
             taskList +=
                 `
                     </div>
@@ -652,49 +657,54 @@ function detailProject(id) {
             let addTaskSection =
                 `
             <button class='btn btn-primary' type="button" data-toggle="collapse" data-target="#collapseAddTask" aria-expanded="false" aria-controls="collapseAddTask"><i class='ni ni-fat-add'></i>Add Task</button>
+            <div class="mt-3">
             <div class="collapse" id="collapseAddTask">
-                <div class="card card-body">
+            <div class="card card-body">
                 <div class="form" id="form-post">
-                <div class="col mb-3">
-                    <label for="taskAddName">Task Name</label>
-                    <input name="taskAddName" type="text" class="form-control form-control-alternative"
-                        id="taskAddName" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="taskAddName">Task Name</label>
+                        <input name="taskAddName" type="text" class="form-control form-control-alternative"
+                            id="taskAddName" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please Input Valid Project Name!
+                        </div>
                     </div>
-                    <div class="invalid-feedback">
-                        Please Input Valid Project Name!
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="taskAddDescription">Task Description</label>
+                        <textarea class="form-control" id="taskAddDescription" aria-label="taskAddDescription" required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please Input Valid Project Name!
+                        </div>
                     </div>
-                </div>
-                <div class="col mb-3">
-                    <label for="taskAddDescription">Task Description</label>
-                    <input name="taskAddDescription" type="textarea" class="form-control form-control-alternative"
-                        id="taskAddDescription" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <div class="col mb-3">
+                        <label class="form-control-label" for="dueDateAddInput">Due Date</label>
+                        <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please Input Valid Description!
+                        </div>
                     </div>
-                    <div class="invalid-feedback">
-                        Please Input Valid Project Name!
+                    <div class="col mb-3">
+                    <button type="button" class="btn btn-primary" onclick="addTask(${id})">Submit Task</button>
                     </div>
-                </div>
-                <div class="col mb-3">
-                    <label for="dueDateAddInput">Due Date</label>
-                    <input class="form-control form-control-alternative" name="dueDateAddInput" placeholder="Select date" type="date" id="dueDateAddInput" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please Input Valid Description!
-                    </div>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="addTask(${id})">Submit Task</button>
-            </div>          
-                </div>
+                
+                </div>          
             </div>
+        </div>
+            </div>
+            
             
             `;
             $("#addTaskSection").html(addTaskSection);
-            
+
         })
     });
 }
@@ -705,40 +715,40 @@ function addTask(id) {
         type: 'get'
     }).done((result) => {
         console.log(id);
-                let obj = {};
-                obj.ProjectId = result.data.ProjectId;
-                obj.Name = $("#taskAddName").val();
-                obj.Description = $("#taskAddDescription").val();
-                let dueDates = new Date($('#dueDateAddInput').val());
-                dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
-                obj.DueDate = dueDates;
-                obj.IsCompleted = false;
-                console.log(obj);
-                $.ajax({
-                    url: "https://localhost:44335/task/postjson",
-                    type: "post",
-                    dataType: "json",
-                    data: obj,
-                    beforeSend: data => {
-                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                    },
-                    success: function (data) {
-                        $("#tableProject").DataTable().ajax.reload();
-                        $("#detailProject").modal('hide');
-                        swal({
-                            title: "Success!",
-                            text: `${obj.Name} has been added !`,
-                            timer: 1000
-                        });
-                    },
-                    failure: function (data) {
-                        swal(
-                            "Internal Error",
-                            "Oops, Product was not saved.",
-                            "error"
-                        )
-                    }
+        let obj = {};
+        obj.ProjectId = result.data.ProjectId;
+        obj.Name = $("#taskAddName").val();
+        obj.Description = $("#taskAddDescription").val();
+        let dueDates = new Date($('#dueDateAddInput').val());
+        dueDates = dueDates.toISOString().slice(0, 10).replace('T', ' ');
+        obj.DueDate = dueDates;
+        obj.IsCompleted = false;
+        console.log(obj);
+        $.ajax({
+            url: "https://localhost:44335/task/postjson",
+            type: "post",
+            dataType: "json",
+            data: obj,
+            beforeSend: data => {
+                data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+            },
+            success: function (data) {
+                $("#tableProject").DataTable().ajax.reload();
+                $("#detailProject").modal('hide');
+                swal({
+                    title: "Success!",
+                    text: `${obj.Name} has been added !`,
+                    timer: 1000
                 });
+            },
+            failure: function (data) {
+                swal(
+                    "Internal Error",
+                    "Oops, Product was not saved.",
+                    "error"
+                )
+            }
+        });
     })
 }
 
@@ -794,5 +804,118 @@ function deleteTask(id) {
         })
     })
 }
+
+function assignTask(id) {
+    $.ajax({
+        url: `https://localhost:44335/task/getjson`,
+        type: 'get'
+    }).done((result) => {
+        const dataOption = result.data.length;
+        const user = {};
+        const optionName = {};
+        for (let i = 0; i < dataOption; i++) {
+            let assignTask =
+                `
+        <div class="card card-body">
+            <div class="form" id="form-post">
+                <input value="${id}" hidden/>
+                <div class="col mb-3">
+                    <label class="form-control-label" for="UserId">Email | Username</label>
+                    <select class="form-control" id="UserId${i}" required>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a valid supplier.
+                    </div>
+                </div>
+                <div class="col mb-3">
+                    <button type="button" class="btn btn-success" id="assignTaskBtn${i}">Assign Task</button>
+                </div>
+            </div>
+        </div>
+        `
+            $(`#collapseAssign${i}`).html(assignTask);
+        }
+        
+        for (let i = 0; i < dataOption; i++) {
+            $.ajax({
+                url: `https://localhost:44335/user/getjson`,
+                type: 'get'
+            }).done((result) => {
+                
+                let option = "";
+                option +=
+                    `
+                <option selected disabled value="">Choose User or Employee..</option>
+                `
+                $.each(result.data, (key, val) => {
+                    option +=
+                        `
+                    <option value=${val.UserId}>${val.Email} | ${val.Username}</option>
+                    `;
+                    user[val.Email] = val.UserId;
+                })
+                $(`#UserId${i}`).html(option);
+            })
+        }
+        $.ajax({
+            url: `https://localhost:44335/task/getjson`,
+            type: 'get'
+        }).done((result) => {
+            for (let i = 0; i < result.data.length; i++) {
+                optionName[i] = document.getElementById(`UserId${i}`);
+            }
+            for (let i = 0; i < result.data.length; i++) {
+                $(`#assignTaskBtn${i}`).on('click', () => {
+                    let options = Object.values(optionName)[i];
+                    let value = options.options[options.selectedIndex].value;
+                    
+                    let obj = {};
+                    obj.TaskId = parseInt(id);
+                    obj.UserId = parseInt(value);
+                    console.log(obj);
+
+                    swal({
+                        title: "Are you sure?",
+                        text: `You will assign task`,
+                        buttons: {
+                            cancel: true,
+                            confirm: true,
+                            closeModal: false
+                        },
+                    }).then(function (isConfirm) {
+                        if (isConfirm === true) {
+                            $.ajax({
+                                url: "https://localhost:44335/taskuser/postjson",
+                                type: "post",
+                                dataType: "json",
+                                data: obj,
+                                beforeSend: data => {
+                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                                },
+                                success: function (data) {
+                                    $("#tableProject").DataTable().ajax.reload();
+                                    $("#detailProject").modal('hide'),
+                                        swal(
+                                            "Success!",
+                                            `Task has been assigned`,
+                                            "success"
+                                        )
+                                },
+                                failure: function (data) {
+                                    swal(
+                                        "Internal Error",
+                                        "Oops, Product was not saved.",
+                                        "error"
+                                    )
+                                }
+                            });
+                        }
+                    })
+                })
+            }
+        })
+    })
+}
+
 
 console.log("This is Session User Id" + $("#sessionUserId").val());

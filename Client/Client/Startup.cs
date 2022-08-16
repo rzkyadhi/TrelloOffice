@@ -32,6 +32,7 @@ namespace Client
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddScoped<UserRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<TaskRepository>();
             services.AddScoped<TaskUserRepository>();
