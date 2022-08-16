@@ -1,70 +1,32 @@
 $(document).ready(() => {
-    let table = $('#tableTask').DataTable({
-        "language": {
-            "paginate": {
-                "previous": "<i class='ni ni-bold-left'></i>",
-                "next": "<i class='ni ni-bold-right'></i>"
+    $.ajax({
+        url: 'https://localhost:44335/taskuser/getjson',
+        type: 'get'
+    }).done((result) => {
+        let filteredData = [];
+        for (let i = 0; i < result.data.length; i++) {
+            if (result.data[i].UserId == $("#sessionUserId").val()) {
+                filteredData.push(result.data[i]);
             }
-        },
-        columnDefs: [{
-                orderable: false,
-                targets: -1
-            },
-            {
-                className: 'text-center',
-                targets: [0, 1, 2, 3]
-            }
-        ],
-        "ajax": {
-            "url": "https://localhost:44335/TaskUser/GetJSON",
-            "dataSrc": function (json) {
-                json.data.UserId === $("#sessionUserId").val()
-                return json.data;
-            },
-        },
-        "columns": [{
-                "data": "UserId",
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                }
-        },
-            {
-                "data": "task.TaskId",
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                }
-            },
-            {
-                "data": "task.ProjectId"
-            },
-            {
-                "data": "task.Name"
-            },
-            {
-                "data": "task.Description"
-            },
-            {
-                "data": "task.DueDate"
-            },
-            {
-                "data": "task.IsCompleted"
-            },
-            {
-                // data: null,
-                render: function (data, type, row) {
-
-                    return `
-                                <button type="button" onclick="editTask(${row['TaskId']})" data-toggle="modal" data-target="#editTask" class="btn btn-warning">
-                                    Edit
-                                </button>
-                                <button type="button" onclick="deleteTask(${row['TaskId']})" class="btn btn-danger">
-                                    Delete
-                                </button>`
-                }
-            }
-        ],
+        }
+        console.log(filteredData);
+        
+        let table = $('#tableTask').DataTable({
+            data: filteredData,
+            columns: [
+                { data: 'UserId' },
+                { data: 'task.Name' },
+                { data: 'task.Description' },
+                { data: 'task.DueDate' },
+                { data: 'task.IsCompleted' }
+            ]
+        })
     })
+
+
+
 })
+console.log($("#sessionUserId").val());
 
 function addTask() {
     let createModalBody =
@@ -477,14 +439,14 @@ function detailProject(id) {
             let progressPercent = "";
             let progressBar = "";
             for (let i = 0; i < result.data.length; i++) {
-                
+
                 if (projectId[i] == id) {
-                    progressPercent += 
-                    `
+                    progressPercent +=
+                        `
                     <span>${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%</span>
                     `
                     progressBar +=
-                    `
+                        `
                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}" aria-valuemin="0" aria-valuemax="100" style="width: ${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%;"></div>
                     `
                 }
