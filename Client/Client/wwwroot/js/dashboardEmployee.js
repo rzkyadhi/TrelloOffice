@@ -50,12 +50,17 @@ $.ajax({
         }   
     }
     let backgroundClr = []
-    for (let i = 0; i < result.data.length; i++) {
-        if (result.data[i].task.IsCompleted == true) {
-            backgroundClr.push('#2dce89');
-        }
-        if (result.data[i].task.IsCompleted == false) {
-            backgroundClr.push('#f5365c');
+    for (let i = 0; i < Object.keys(hashMap).length; i++) {
+        for (let y = 0; y < result.data.length; y++) {
+            if (Object.keys(hashMap)[i] == result.data[y].task.DueDate && $("#sessionUserId").val() == result.data[y].UserId) {
+                if (result.data[y].task.IsCompleted == true) {
+                    backgroundClr.push('#2dce89');
+                }
+                if (result.data[y].task.IsCompleted == false) {
+                    backgroundClr.push('#f5365c');
+                }
+            }
+
         }
     }
 

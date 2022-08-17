@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<Client.Models.Task>
 
-	@{
+@{
 	Layout = "_LayoutDashboard";
-	}
+	ViewData["Title"] = "Task";
+}
 	@using Microsoft.AspNetCore.Http
 	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
