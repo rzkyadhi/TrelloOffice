@@ -13,24 +13,27 @@ $(document).ready(() => {
             },
         },
         "columns": [{
-                "data": "UserId",
-            },
-            {
-                "data": "task.Name"
-            },
-            {
-                "data": "task.Description"
-            },
-            {
-                "data": "task.DueDate"
-            },
-            {
-                "data": "task.IsCompleted"
+            "data": "UserId",
+        },
+        {
+            "data": "task.Name"
+        },
+        {
+            "data": "task.Description"
+        },
+        {
+            "data": "task.DueDate"
+        },
+        {
+            /*"data": "task.IsCompleted",*/
+            render: function (data, type, row) {
+                return `<button type="button" onclick="detailTask(${row['TaskId']})" data-toggle="modal" data-target="#detailTask" class="btn btn-success">
+                                    Details
+                                </button>`
             }
-        ],
-    })
-
-
+        }
+        ]
+    });
 })
 console.log($("#sessionUserId").val());
 
@@ -351,141 +354,49 @@ function deleteProject(id) {
     })
 }
 
-function detailProject(id) {
+function detailTask(id) {
     $.ajax({
-        url: `https://localhost:44335/project/getjsonbyid/${id}`,
+        url: `https://localhost:44335/task/getjsonbyid/${id}`,
         type: 'get'
     }).done((result) => {
         let detailModalBody =
             `
         <div class="form" id="form-post">
-            <div class="col mb-3">
-                <i class='ni ni-bag-17'></i>
-                <label for="projectName">Project Name</label>
-                <input asp-for="Name" name="projectName" type="text" class="form-control form-control-alternative"
-                    id="projectName" value="${result.data.Name}" readonly required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Project Name!
-                </div>
-            </div>
-            <div class="col mb-3">
-                <i class='ni ni-align-left-2'></i>
-                <label for="Description">Description</label>
-                <input asp-for="Description" name="description" type="text" class="form-control form-control-alternative"
-                    id="description" value="${result.data.Description}" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please Input Valid Description!
-                </div>
-            </div>
             <div class="col mb-3" id="taskList">
+                <i class='ni ni-check-bold'></i>
+                    <label for="Task">Checklist Task</label>
+                        <ul class="list-group">
+                            <div class="row">
+                                <div class="col" id="listGroup">
             </div>
         </div>               
         `;
         $("#modalDetail").html(detailModalBody);
-        $.ajax({
-            url: `https://localhost:44335/task/getjson`,
-            type: 'get'
-        }).done((result) => {
-            let projectId = [];
-            let hashTaskProject = {};
-            let hashTaskDoneProject = {};
-            for (let i = 0; i < result.data.length; i++) {
-                if (projectId.includes(result.data[i].ProjectId)) {
-                    continue;
-                } else {
-                    projectId.push(result.data[i].ProjectId);
-                }
-            }
-            for (let i = 0; i < projectId.length; i++) {
-                hashTaskProject[projectId[i]] = 0;
-                hashTaskDoneProject[projectId[i]] = 0;
-            }
-            for (let i = 0; i < result.data.length; i++) {
-                if (result.data[i].IsCompleted == true) {
-                    for (let y = 0; y < projectId.length; y++) {
-                        if (Object.keys(hashTaskDoneProject)[y] == result.data[i].ProjectId) {
-                            hashTaskDoneProject[Object.keys(hashTaskDoneProject)[y]] += 1;
-                        }
-                    }
-                }
-                for (let y = 0; y < projectId.length; y++) {
-                    if (Object.keys(hashTaskProject)[y] == result.data[i].ProjectId) {
-                        hashTaskProject[Object.keys(hashTaskProject)[y]] += 1;
-                    }
-                }
-            }
-            let task =
-                `
-                <i class='ni ni-check-bold'></i>
-                    <label for="Task">Checklist Task</label>
-                    <div class="progress-wrapper">
-                        <div class="progress-info">
-                            <div class="progress-label">
-                            <span>Task completed</span>
-                            </div>
-                            <div class="progress-percentage" id="progressPercent">
-                            
-                            </div>
-                        </div>
-                        <div class="progress" id="progressBar">
-                            
-                        </div>
-                        </div>
-                        <ul class="list-group">
-                            <div class="row">
-                                <div class="col" id="listGroup">
-            `;
-            $("#taskList").html(task);
-            let progressPercent = "";
-            let progressBar = "";
-            for (let i = 0; i < result.data.length; i++) {
-
-                if (projectId[i] == id) {
-                    progressPercent +=
-                        `
-                    <span>${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%</span>
-                    `
-                    progressBar +=
-                        `
-                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}" aria-valuemin="0" aria-valuemax="100" style="width: ${Math.floor((Object.values(hashTaskDoneProject)[i] / Object.values(hashTaskProject)[i])*100)}%;"></div>
-                    `
-                }
-            }
-            $("#progressPercent").html(progressPercent);
-            $("#progressBar").html(progressBar);
             let taskList = "";
-            for (let i = 0; i < result.data.length; i++) {
-                if (result.data[i].ProjectId == id) {
-                    if (result.data[i].IsCompleted == true) {
+                if (result.data.TaskId == id) {
+                    if (result.data.IsCompleted == true) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}" checked>
-                            <s>${result.data[i].Name}</s>
-                            <span class="badge badge-pill badge-success">${result.data[i].DueDate}</span>
+                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${id}" checked>
+                            <s>${result.data.Name}</s>
+                            <span class="badge badge-pill badge-success">${result.data.DueDate}</span>
                         </li>
                         `
                     }
-                    if (result.data[i].IsCompleted == false) {
+                    if (result.data.IsCompleted == false) {
                         taskList +=
                             `
                         <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${i}">
-                            ${result.data[i].Name}
-                            <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
+                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${id}">
+                            ${result.data.Name}
+                            <span class="badge badge-pill badge-danger">${result.data.DueDate}</span>
                         </li>
                         `
                     }
                 }
 
 
-            }
             taskList +=
                 `
                     </div>
@@ -494,21 +405,17 @@ function detailProject(id) {
             `
             $("#listGroup").html(taskList);
 
-            for (let i = 0; i < result.data.length; i++) {
-
                 $(function () {
-                    $(`#checkbox${i}`).on('change', function (e) {
+                    $(`#checkbox${id}`).on('change', function (e) {
 
                         if ($(this).is(':checked')) {
                             let check = true;
                             let obj = {};
-                            obj.TaskId = result.data[i].TaskId;
-                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
-                            obj.ProjectId = result.data[i].ProjectId;
-                            obj.CategoryId = result.data[i].CategoryId;
-                            obj.Name = result.data[i].Name;
-                            obj.Description = result.data[i].Description;
-                            obj.DueDate = result.data[i].DueDate;
+                            obj.TaskId = result.data.TaskId;
+                            obj.ProjectId = result.data.ProjectId;
+                            obj.Name = result.data.Name;
+                            obj.Description = result.data.Description;
+                            obj.DueDate = result.data.DueDate;
                             obj.IsCompleted = check;
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
@@ -519,8 +426,8 @@ function detailProject(id) {
                                     data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
                                 },
                                 success: function (data) {
-                                    $("#tableProject").DataTable().ajax.reload();
-                                    $("#detailProject").modal('hide'),
+                                    $("#tableTask").DataTable().ajax.reload();
+                                    $("#detailTask").modal('hide'),
                                         swal(
                                             "Success!",
                                             `${obj.Name} is done !`,
@@ -538,13 +445,11 @@ function detailProject(id) {
                         } else {
                             let check = false;
                             let obj = {};
-                            obj.TaskId = result.data[i].TaskId;
-                            obj.RoleUserTaskId = result.data[i].RoleUserTaskId;
-                            obj.ProjectId = result.data[i].ProjectId;
-                            obj.CategoryId = result.data[i].CategoryId;
-                            obj.Name = result.data[i].Name;
-                            obj.Description = result.data[i].Description;
-                            obj.DueDate = result.data[i].DueDate;
+                            obj.TaskId = result.data.TaskId;
+                            obj.ProjectId = result.data.ProjectId;
+                            obj.Name = result.data.Name;
+                            obj.Description = result.data.Description;
+                            obj.DueDate = result.data.DueDate;
                             obj.IsCompleted = check;
                             $.ajax({
                                 url: "https://localhost:44335/task/editjson",
@@ -555,8 +460,8 @@ function detailProject(id) {
                                     data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
                                 },
                                 success: function (data) {
-                                    $("#tableProject").DataTable().ajax.reload();
-                                    $("#detailProject").modal('hide');
+                                    $("#tableTask").DataTable().ajax.reload();
+                                    $("#detailTask").modal('hide');
                                     swal({
                                         title: "Success!",
                                         text: `${obj.Name} is not done yet !`,
@@ -574,9 +479,6 @@ function detailProject(id) {
                         }
                     });
                 });
-
-            }
-        })
     });
 
 }
