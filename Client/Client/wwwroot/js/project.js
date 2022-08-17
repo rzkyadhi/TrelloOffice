@@ -452,7 +452,7 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}">
-                                <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
+                                <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
                                     <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
