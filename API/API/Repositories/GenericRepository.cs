@@ -27,14 +27,14 @@ namespace API.Repositories
             return data;
         }
 
-        public int Post(TModel model)
+        public virtual int Post(TModel model)
         {
             myContext.Set<TModel>().Add(model);
             var data = myContext.SaveChanges();
             return data;
         }
 
-        public int Put(TModel model)
+        public virtual int Put(TModel model)
         {
             myContext.Set<TModel>().Update(model);
             var data = myContext.SaveChanges();
