@@ -28,6 +28,7 @@ namespace API.Repositories.Data
         {
             var data = myContext.TB_M_TASKUSER
                 .Include(x => x.Task)
+                .ThenInclude(x => x.Project)
                 .ToList();
             return data;
         }

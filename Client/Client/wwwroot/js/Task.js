@@ -40,6 +40,9 @@ $(document).ready(() => {
                 "data": "task.Description"
             },
             {
+                "data": "task.project.Name"
+            },
+            {
                 "data": "task.DueDate",
                 render: function (data, type, row) {
                     return row.task['IsCompleted'] == true ?
