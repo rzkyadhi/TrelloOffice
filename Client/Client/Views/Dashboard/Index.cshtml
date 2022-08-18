@@ -1,11 +1,12 @@
 ﻿@{
 Layout = "_LayoutDashboard";
+ViewData["Title"] = "Dashboard";
 }
 @if(User.Identity.IsAuthenticated)
 {
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-<input type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetString("UserId")" id="sessionUserId" />
+<input type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetString(" UserId")" id="sessionUserId" />
 }
 <div class="header bg-primary pb-6">
   <div class="container-fluid">
@@ -144,7 +145,7 @@ Layout = "_LayoutDashboard";
 {
 <div class="container-fluid mt--6">
   <div class="row">
-    <div class="col-xl-8">
+    <div class="col">
       <div class="card">
         <div class="card-header bg-transparent">
           <div class="row align-items-center">
@@ -176,7 +177,9 @@ Layout = "_LayoutDashboard";
         </div>
       </div>
     </div>
-    <div class="col-xl-4">
+  </div>
+  <div class="row">
+    <div class="col">
       <div class="card">
         <div class="card-header bg-transparent">
           <div class="row align-items-center">

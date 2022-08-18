@@ -452,7 +452,7 @@ function detailProject(id) {
                         <li class="list-group-item">
                             <div class="d-flex custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="checkbox${i}">
-                                <label class="custom-control-label" for="checkbox${i}"><s>${result.data[i].Name}</s></label>
+                                <label class="custom-control-label" for="checkbox${i}">${result.data[i].Name}</label>
                                 <div class="ml-auto">
                                     <span class="badge badge-pill badge-danger">${result.data[i].DueDate}</span>
                                     <button class="btn btn-success btn-sm" onclick="assignTask(${result.data[i].TaskId})" type="button" data-toggle="collapse" data-target="#collapseAssign${i}" aria-expanded="false" aria-controls="collapseAssign${i}">
@@ -835,13 +835,13 @@ function assignTask(id) {
         `
             $(`#collapseAssign${i}`).html(assignTask);
         }
-        
+
         for (let i = 0; i < dataOption; i++) {
             $.ajax({
                 url: `https://localhost:44335/user/getjson`,
                 type: 'get'
             }).done((result) => {
-                
+
                 let option = "";
                 option +=
                     `
@@ -868,7 +868,7 @@ function assignTask(id) {
                 $(`#assignTaskBtn${i}`).on('click', () => {
                     let options = Object.values(optionName)[i];
                     let value = options.options[options.selectedIndex].value;
-                    
+
                     let obj = {};
                     obj.TaskId = parseInt(id);
                     obj.UserId = parseInt(value);
@@ -885,14 +885,15 @@ function assignTask(id) {
                     }).then(function (isConfirm) {
                         if (isConfirm === true) {
                             $.ajax({
-                                url: "https://localhost:44335/taskuser/postjson",
-                                type: "post",
-                                dataType: "json",
-                                data: obj,
-                                beforeSend: data => {
-                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                                },
-                                success: function (data) {
+                                    url: "https://localhost:44335/taskuser/postjson",
+                                    type: "post",
+                                    dataType: "json",
+                                    data: obj,
+                                    beforeSend: data => {
+                                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                                    },
+                                })
+                                .done((data) => {
                                     $("#tableProject").DataTable().ajax.reload();
                                     $("#detailProject").modal('hide'),
                                         swal(
@@ -900,15 +901,23 @@ function assignTask(id) {
                                             `Task has been assigned`,
                                             "success"
                                         )
-                                },
-                                failure: function (data) {
-                                    swal(
-                                        "Internal Error",
-                                        "Oops, Product was not saved.",
+                                })
+                                .fail((request) => {
+                                    if (request.status == 400) {
+                                        swal(
+                                        `The Person Has been Assigned with that Task`,
+                                        "Oops, Task was not assigned.",
                                         "error"
-                                    )
-                                }
-                            });
+                                        )
+                                    }
+                                    if (request.status == 500) {
+                                        swal(
+                                            "Internal Server Error ! There is a problem with the server",
+                                            "Contact the admin for further information.",
+                                            "error"
+                                        )
+                                    }
+                                });
                         }
                     })
                 })

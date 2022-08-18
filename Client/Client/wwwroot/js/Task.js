@@ -1,5 +1,20 @@
 $(document).ready(() => {
     let table = $('#tableTask').DataTable({
+        "language": {
+            "paginate": {
+                "previous": "<i class='ni ni-bold-left'></i>",
+                "next": "<i class='ni ni-bold-right'></i>"
+            }
+        },
+        columnDefs: [{
+                orderable: false,
+                targets: -1
+            },
+            {
+                className: 'text-center',
+                targets: [0, 1, 2, 3, 4]
+            },
+        ],
         "ajax": {
             "url": "https://localhost:44335/taskuser/GetJSON",
             "dataSrc": function (json) {
@@ -13,25 +28,41 @@ $(document).ready(() => {
             },
         },
         "columns": [{
-            "data": "UserId",
-        },
-        {
-            "data": "task.Name"
-        },
-        {
-            "data": "task.Description"
-        },
-        {
-            "data": "task.DueDate"
-        },
-        {
-            /*"data": "task.IsCompleted",*/
-            render: function (data, type, row) {
-                return `<button type="button" onclick="detailTask(${row['TaskId']})" data-toggle="modal" data-target="#detailTask" class="btn btn-success">
-                                    Details
-                                </button>`
+                "data": "UserId",
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {
+                "data": "task.Name"
+            },
+            {
+                "data": "task.Description"
+            },
+            {
+                "data": "task.project.Name"
+            },
+            {
+                "data": "task.DueDate",
+                render: function (data, type, row) {
+                    return row.task['IsCompleted'] == true ?
+                        `<span class='badge-lg badge-pill badge-success'>${row.task['DueDate']}</span>` :
+                        `<span class='badge-lg badge-pill badge-warning'>${row.task['DueDate']}</span>`
+
+                },
+            },
+            {
+                /*"data": "task.IsCompleted",*/
+                render: function (data, type, row) {
+                    return row.task['IsCompleted'] == true ?
+                        `<button type="button" onclick="detailTask(${row['TaskId']})" class="btn btn-success">
+                    Finished Task
+                </button>` :
+                        `<button type="button" onclick="detailTask(${row['TaskId']})" class="btn btn-warning">
+                    Unfinished Task
+                </button>`
+                }
             }
-        }
         ]
     });
 })
@@ -359,126 +390,59 @@ function detailTask(id) {
         url: `https://localhost:44335/task/getjsonbyid/${id}`,
         type: 'get'
     }).done((result) => {
-        let detailModalBody =
-            `
-        <div class="form" id="form-post">
-            <div class="col mb-3" id="taskList">
-                <i class='ni ni-check-bold'></i>
-                    <label for="Task">Checklist Task</label>
-                        <ul class="list-group">
-                            <div class="row">
-                                <div class="col" id="listGroup">
-            </div>
-        </div>               
-        `;
-        $("#modalDetail").html(detailModalBody);
-            let taskList = "";
-                if (result.data.TaskId == id) {
-                    if (result.data.IsCompleted == true) {
-                        taskList +=
-                            `
-                        <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${id}" checked>
-                            <s>${result.data.Name}</s>
-                            <span class="badge badge-pill badge-success">${result.data.DueDate}</span>
-                        </li>
-                        `
+        let check = "";
+        let text = "";
+        let obj = {};
+        obj.TaskId = id;
+        obj.ProjectId = result.data.ProjectId;
+        obj.Name = result.data.Name;
+        obj.Description = result.data.Description;
+        obj.DueDate = result.data.DueDate;
+        if (result.data.IsCompleted == true) {
+            check = false;
+            text = `${obj.Name} will marked as not done`
+        } 
+        if (result.data.IsCompleted == false) {
+            check = true;
+            text = `${obj.Name} will marked as done`
+        }
+        obj.IsCompleted = check;
+        swal({
+            title: "Are you sure?",
+            text: text,
+            buttons: {
+                cancel: true,
+                confirm: true,
+                closeModal: false
+            },
+        }).then((isConfirm) => {
+            if (isConfirm === true) {
+                $.ajax({
+                    url: "https://localhost:44335/task/editjson",
+                    type: "put",
+                    dataType: "json",
+                    data: obj,
+                    beforeSend: data => {
+                        data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
+                    },
+                    success: () => {
+                        $("#tableTask").DataTable().ajax.reload();
+                        swal(
+                            "Success",
+                            `${obj.name} has been saved`,
+                            "success"
+                        )
+                    },
+                    failure: () => {
+                        swal(
+                            "Internal Server Error",
+                            `Oops, ${obj.name} was not saved`,
+                            "error"
+                        )
                     }
-                    if (result.data.IsCompleted == false) {
-                        taskList +=
-                            `
-                        <li class="list-group-item">
-                            <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox${id}">
-                            ${result.data.Name}
-                            <span class="badge badge-pill badge-danger">${result.data.DueDate}</span>
-                        </li>
-                        `
-                    }
-                }
-
-
-            taskList +=
-                `
-                    </div>
-                </div>
-            </ul>   
-            `
-            $("#listGroup").html(taskList);
-
-                $(function () {
-                    $(`#checkbox${id}`).on('change', function (e) {
-
-                        if ($(this).is(':checked')) {
-                            let check = true;
-                            let obj = {};
-                            obj.TaskId = result.data.TaskId;
-                            obj.ProjectId = result.data.ProjectId;
-                            obj.Name = result.data.Name;
-                            obj.Description = result.data.Description;
-                            obj.DueDate = result.data.DueDate;
-                            obj.IsCompleted = check;
-                            $.ajax({
-                                url: "https://localhost:44335/task/editjson",
-                                type: "put",
-                                dataType: "json",
-                                data: obj,
-                                beforeSend: data => {
-                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                                },
-                                success: function (data) {
-                                    $("#tableTask").DataTable().ajax.reload();
-                                    $("#detailTask").modal('hide'),
-                                        swal(
-                                            "Success!",
-                                            `${obj.Name} is done !`,
-                                            "success"
-                                        )
-                                },
-                                failure: function (data) {
-                                    swal(
-                                        "Internal Error",
-                                        "Oops, Product was not saved.",
-                                        "error"
-                                    )
-                                }
-                            });
-                        } else {
-                            let check = false;
-                            let obj = {};
-                            obj.TaskId = result.data.TaskId;
-                            obj.ProjectId = result.data.ProjectId;
-                            obj.Name = result.data.Name;
-                            obj.Description = result.data.Description;
-                            obj.DueDate = result.data.DueDate;
-                            obj.IsCompleted = check;
-                            $.ajax({
-                                url: "https://localhost:44335/task/editjson",
-                                type: "put",
-                                dataType: "json",
-                                data: obj,
-                                beforeSend: data => {
-                                    data.setRequestHeader("RequestVerificationToken", $("[name='__RequestVerificationToken']").val());
-                                },
-                                success: function (data) {
-                                    $("#tableTask").DataTable().ajax.reload();
-                                    $("#detailTask").modal('hide');
-                                    swal({
-                                        title: "Success!",
-                                        text: `${obj.Name} is not done yet !`,
-                                        timer: 1000
-                                    })
-                                },
-                                failure: function (data) {
-                                    swal(
-                                        "Internal Error",
-                                        "Oops, Product was not saved.",
-                                        "error"
-                                    )
-                                }
-                            });
-                        }
-                    });
-                });
+                })
+            }
+        })
     });
 
 }
