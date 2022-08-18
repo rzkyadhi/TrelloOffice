@@ -20,8 +20,6 @@ namespace API.Repositories.Data
         {
             var data = myContext.TB_M_TASK
                 .Include(x => x.Project)
-                .Include(x => x.Category)
-                .Include(x => x.RoleUserTask)
                 .ToList();
             return data;
         }

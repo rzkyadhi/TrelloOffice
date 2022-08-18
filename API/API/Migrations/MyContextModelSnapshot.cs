@@ -18,22 +18,6 @@ namespace API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("API.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("TB_M_CATEGORY");
-                });
-
             modelBuilder.Entity("API.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeID")
@@ -120,32 +104,12 @@ namespace API.Migrations
                     b.ToTable("TB_M_ROLEUSER");
                 });
 
-            modelBuilder.Entity("API.Models.RoleUserTask", b =>
-                {
-                    b.Property<int>("RoleUserTaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("RoleUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RoleUserTaskId");
-
-                    b.HasIndex("RoleUserId");
-
-                    b.ToTable("TB_M_ROLEUSERTASK");
-                });
-
             modelBuilder.Entity("API.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -165,18 +129,33 @@ namespace API.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleUserTaskId")
-                        .HasColumnType("int");
-
                     b.HasKey("TaskId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("RoleUserTaskId");
-
                     b.ToTable("TB_M_TASK");
+                });
+
+            modelBuilder.Entity("API.Models.TaskUser", b =>
+                {
+                    b.Property<int>("TaskUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskUserId");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TB_M_TASKUSER");
                 });
 
             modelBuilder.Entity("API.Models.User", b =>
@@ -216,32 +195,26 @@ namespace API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Models.RoleUserTask", b =>
-                {
-                    b.HasOne("API.Models.RoleUser", "RoleUser")
-                        .WithMany()
-                        .HasForeignKey("RoleUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("API.Models.Task", b =>
                 {
-                    b.HasOne("API.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("API.Models.RoleUserTask", "RoleUserTask")
+            modelBuilder.Entity("API.Models.TaskUser", b =>
+                {
+                    b.HasOne("API.Models.Task", "Task")
                         .WithMany()
-                        .HasForeignKey("RoleUserTaskId")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

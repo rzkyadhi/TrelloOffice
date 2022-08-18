@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Client
@@ -32,9 +33,10 @@ namespace Client
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddScoped<UserRepository>();
             services.AddScoped<ProjectRepository>();
-            services.AddScoped<CategoryRepository>();
             services.AddScoped<TaskRepository>();
+            services.AddScoped<TaskUserRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
             services.AddTokenAuthentication(Configuration);
@@ -53,6 +55,15 @@ namespace Client
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseStatusCodePages(async context =>
+            {
+                var request = context.HttpContext.Request;
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized)) response.Redirect("/unauthorized");
+                if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden)) response.Redirect("/forbidden");
+                if (response.StatusCode.Equals((int)HttpStatusCode.NotFound)) response.Redirect("/notfound");
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -69,6 +80,8 @@ namespace Client
             });
 
             app.UseAuthentication();
+
+            app.UseMiddleware<RedirectMiddleware>();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

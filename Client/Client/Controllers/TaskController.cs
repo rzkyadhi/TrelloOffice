@@ -103,6 +103,43 @@ namespace Client.Controllers
         }
         #endregion
 
+        #region PostJSON
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostJSON(Task task)
+        {
+            var result = taskRepository.Post(task);
+            if (result == System.Net.HttpStatusCode.Created) return Ok(new
+            {
+                status = result,
+                message = "CREATED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "Bad Request"
+            });
+        }
+        #endregion
+
+        #region GetJSONById
+        public ActionResult GetJSONById(int id)
+        {
+            var result = taskRepository.Get(id);
+            if (result != null) return Ok(new
+            {
+                status = 200,
+                message = "SUCCESS",
+                data = result
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "BAD REQUEST"
+            });
+        }
+        #endregion GetJSONById
+
         #region EditJSON
         [HttpPut]
         [ValidateAntiForgeryToken]
@@ -118,6 +155,25 @@ namespace Client.Controllers
             {
                 status = 400,
                 message = "Bad Request"
+            });
+        }
+        #endregion DeleteJSON
+
+        #region DeleteJSON
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteJSON(Task task)
+        {
+            var result = taskRepository.Delete(task);
+            if (result == System.Net.HttpStatusCode.OK) return Ok(new
+            {
+                status = 200,
+                message = "DELETED"
+            });
+            return BadRequest(new
+            {
+                status = 400,
+                message = "BAD REQUEST"
             });
         }
         #endregion DeleteJSON

@@ -12,7 +12,6 @@ $.ajax({
 $.ajax({
     url: "https://localhost:44335/task/GetJSON"
 }).done((result) => {
-    console.log(result);
     let dueDate = [];
     let hashMap = {};
 
@@ -20,13 +19,13 @@ $.ajax({
     for (let i = 0; i < result.data.length; i++) {
         dueDate.push(result.data[i].DueDate)
     }
-    
 
     //Pushing into HashMap
     for (let i = 0; i < dueDate.length; i++) {
         if (Object.keys(hashMap).length == 0) {
             hashMap[dueDate[i]] = 1;
             i++;
+            if (i == dueDate.length) break;
         }
         if (dueDate[i] in hashMap) {
             hashMap[dueDate[i]] = hashMap[dueDate[i]] + 1;
@@ -34,6 +33,7 @@ $.ajax({
         if (dueDate[i] in hashMap == false) {
             hashMap[dueDate[i]] = 1;
         }
+        
     }
     let backgroundClr = []
     for (let i = 0; i < result.data.length; i++) {
@@ -44,7 +44,6 @@ $.ajax({
             backgroundClr.push('#f5365c');
         }
     }
-    console.log(backgroundClr);
 
     let dataBar = {
         labels: Object.keys(hashMap),
@@ -97,4 +96,44 @@ $.ajax({
         document.getElementById('barChart'),
         configBar
     );
+})
+
+$(document).ready(() => {
+    let table = $('#tableEmployeeAccountList').DataTable({
+        "language": {
+            "paginate": {
+                "previous": "<i class='ni ni-bold-left'></i>",
+                "next": "<i class='ni ni-bold-right'></i>"
+            }
+        },
+        columnDefs: [{
+                orderable: false,
+                targets: -1
+            },
+            {
+                className: 'text-center',
+                targets: [0, 1, 2, 3]
+            }
+        ],
+        "ajax": {
+            "url": "https://localhost:44335/User/GetJSON",
+            "dataType": "json",
+        },
+        "columns": [{
+                "data": "UserId",
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {
+                "data": "employee.Name"
+            },
+            {
+                "data": "Email"
+            },
+            {
+                "data": "Username"
+            }
+        ],
+    })
 })
