@@ -37,13 +37,13 @@ $(document).ready(() => {
 
                     return `
                                 <button type="button" onclick="detailProject(${row['ProjectId']})" data-toggle="modal" data-target="#detailProject" class="btn btn-success">
-                                    Details
+                                    <i class="fas fa-solid fa-file"></i>
                                 </button>
                                 <button type="button" onclick="editProject(${row['ProjectId']})" data-toggle="modal" data-target="#editProject" class="btn btn-warning">
-                                    Edit
+                                    <i class="fas fa-solid fa-pen"></i>
                                 </button>
                                 <button type="button" onclick="deleteProject(${row['ProjectId']})" class="btn btn-danger">
-                                    Delete
+                                    <i class="fas fa-solid fa-eraser"></i>
                                 </button>`
                 }
             }
