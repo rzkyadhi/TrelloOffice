@@ -13,6 +13,7 @@ namespace API.Repositories.Data
         {
             this.myContext = myContext;
         }
+
         public List<Category> Get()
         {
             var data = myContext.TB_M_CATEGORY.ToList();

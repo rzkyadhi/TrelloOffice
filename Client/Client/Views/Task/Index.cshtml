@@ -1,40 +1,45 @@
 ﻿@model IEnumerable<Client.Models.Task>
 
-<h1>Task List</h1>
+	@{
+	Layout = "_LayoutDashboard";
+	ViewData["Title"] = "Task";
+	}
+	@using Microsoft.AspNetCore.Http
+	@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<table class="table table-bordered table-info table-hover">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Role User</th>
-			<th scope="col">Project</th>
-			<th scope="col">Category</th>
-			<th scope="col">Task Name</th>
-			<th scope="col">Description</th>
-			<th scope="col">Due Date</th>
-			<th scope="col">Is Completed</th>
-			<th scope="col">Action</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@Html.DisplayFor(model => item.TaskId)</td>
-				<td>@Html.DisplayFor(model => item.RoleUserTask.RoleUserId)</td>
-				<td>@Html.DisplayFor(model => item.Project.Name)</td>
-				<td>@Html.DisplayFor(model => item.Category.Name)</td>
-				<td>@Html.DisplayFor(model => item.Name)</td>
-				<td>@Html.DisplayFor(model => item.Description)</td>
-				<td>@Html.DisplayFor(model => item.DueDate)</td>
-				<td>@Html.DisplayFor(model => item.IsCompleted)</td>
-				<td>
-					<a class="btn btn-warning" asp-route-id="@item.ProjectId" asp-action="Edit">Edit</a>
-					<a class="btn btn-danger" asp-route-id="@item.ProjectId" asp-action="Delete">Delete</a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+	<input type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetString("UserId")" id="sessionUserId" />
 
-<a class="btn btn-primary" asp-action="Create" asp-controller="Project">Add Project</a>
+	<div class="container mt-3">
+		<div class="card">
+			<div class="card-body">
+				<h1 class="card-title text-center">Task List</h1>
+				<div class="table-responsive">
+					<div>
+						<table class="table align-items-center" id="tableTask">
+							<thead class="thead-light text-center">
+								<tr>
+									<th scope="col">No.</th>
+									<th scope="col">Task Urgency</th>
+									<th scope="col">Name</th>
+									<th scope="col">Description</th>
+									<th scope="col">Project Name</th>
+									<th scope="col">Due Date</th>
+									<th scope="col">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@section Scripts{
+	<script src="~/lib/dashboard/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="~/lib/dashboard/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	@Html.AntiForgeryToken()
+	<script src="~/js/Task.js"></script>
+	}

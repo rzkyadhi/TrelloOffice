@@ -8,7 +8,6 @@ namespace Client.Models
         [Key]
         [JsonPropertyName("CategoryId")]
         public int CategoryId { get; set; }
-
         [Required]
         [JsonPropertyName("Name")]
         public string Name { get; set; }

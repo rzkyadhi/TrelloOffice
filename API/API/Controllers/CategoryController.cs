@@ -11,7 +11,7 @@ namespace API.Controllers
     [ApiController]
     public class CategoryController : BaseController<Category, CategoryRepository>
     {
-        CategoryRepository repository;
+        private readonly CategoryRepository repository;
 
         public CategoryController(CategoryRepository repository) : base(repository)
         {

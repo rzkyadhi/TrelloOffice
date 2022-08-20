@@ -11,12 +11,6 @@ namespace Client.Models
         public int TaskId { get; set; }
 
         [Required]
-        [ForeignKey("RoleUserTask")]
-        [JsonPropertyName("RoleUserTaskId")]
-        public int RoleUserTaskId { get; set; }
-        public RoleUserTask RoleUserTask { get; set; }
-
-        [Required]
         [ForeignKey("Project")]
         [JsonPropertyName("ProjectId")]
         public int ProjectId { get; set; }

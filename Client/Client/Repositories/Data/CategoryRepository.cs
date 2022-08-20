@@ -6,7 +6,6 @@ namespace Client.Repositories.Data
     {
         public CategoryRepository(string request = "Category") : base(request)
         {
-
         }
     }
 }
