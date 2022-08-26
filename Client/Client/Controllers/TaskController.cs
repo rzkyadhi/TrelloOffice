@@ -19,9 +19,6 @@ namespace Client.Controllers
         #region Get
         public IActionResult Index()
         {
-            var result = taskRepository.Get();
-            if (result != null)
-                return View(result);
             return View();
         }
         #endregion Get
