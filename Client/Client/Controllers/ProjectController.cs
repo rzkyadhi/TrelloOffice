@@ -61,9 +61,9 @@ namespace Client.Controllers
         #endregion
 
         #region GetJSONById
-        public ActionResult GetJSONById(int id)
+        public async Task<ActionResult> GetJSONById(int id)
         {
-            var result = projectRepository.Get(id);
+            var result = await projectRepository.Get(id);
             if (result != null) return Ok(new
             {
                 status = 200,

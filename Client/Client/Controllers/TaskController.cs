@@ -2,6 +2,7 @@
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
@@ -26,9 +27,9 @@ namespace Client.Controllers
         #endregion Get
 
         #region GetJSON
-        public ActionResult GetJSON()
+        public async Task<ActionResult> GetJSON()
         {
-            var result = taskRepository.Get();
+            var result = await taskRepository.Get();
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -46,7 +47,7 @@ namespace Client.Controllers
         #region PostJSON
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostJSON(Task task)
+        public ActionResult PostJSON(TaskVM task)
         {
             var result = taskRepository.Post(task);
             if (result == System.Net.HttpStatusCode.Created) return Ok(new
@@ -63,9 +64,9 @@ namespace Client.Controllers
         #endregion
 
         #region GetJSONById
-        public ActionResult GetJSONById(int id)
+        public async Task<ActionResult> GetJSONById(int id)
         {
-            var result = taskRepository.Get(id);
+            var result = await taskRepository.Get(id);
             if (result != null) return Ok(new
             {
                 status = 200,
@@ -83,7 +84,7 @@ namespace Client.Controllers
         #region EditJSON
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public ActionResult EditJson(Task task)
+        public ActionResult EditJson(TaskVM task)
         {   
             var result = taskRepository.Put(task);
             if (result == System.Net.HttpStatusCode.OK) return Ok(new
@@ -102,7 +103,7 @@ namespace Client.Controllers
         #region DeleteJSON
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteJSON(Task task)
+        public ActionResult DeleteJSON(TaskVM task)
         {
             var result = taskRepository.Delete(task);
             if (result == System.Net.HttpStatusCode.OK) return Ok(new

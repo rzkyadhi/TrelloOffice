@@ -8,7 +8,7 @@ namespace Client.Repositories.Interface
         where TModel : class
     {
         Task<List<TModel>> Get();
-        TModel Get(int id);
+        Task<TModel> Get(int id);
         HttpStatusCode Put(TModel model);
         HttpStatusCode Post(TModel model);
         HttpStatusCode Delete(TModel model);

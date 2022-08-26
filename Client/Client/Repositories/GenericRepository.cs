@@ -69,16 +69,13 @@ namespace Client.Repositories
         #endregion Get
 
         #region Get By Id
-        public TModel Get(int id)
+        public async Task<TModel> Get(int id)
         {
             TModel model = null;
-            var responseTask = client.GetAsync($"{request}/" + id.ToString());
-            responseTask.Wait();
-
-            var result = responseTask.Result;
-            if (result.IsSuccessStatusCode)
+            var responseTask = await client.GetAsync($"{request}/" + id.ToString());
+            if (responseTask.IsSuccessStatusCode)
             {
-                var readTask = result.Content.ReadAsStringAsync().Result;
+                var readTask = responseTask.Content.ReadAsStringAsync().Result;
                 var parsedObject = JObject.Parse(readTask);
                 var dataOnly = parsedObject["data"].ToString();
 
