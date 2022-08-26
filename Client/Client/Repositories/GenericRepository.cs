@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Client.Repositories
 {
@@ -48,18 +49,15 @@ namespace Client.Repositories
         #endregion Delete
 
         #region Get
-        public List<TModel> Get()
+        public async Task<List<TModel>> Get()
         {
 
             List<TModel> results = null;
-            var responseTask = client.GetAsync($"{request}/");
-            responseTask.Wait();
+            var responseTask = await client.GetAsync($"{request}/");
 
-            var result = responseTask.Result;
-
-            if (result.IsSuccessStatusCode)
+            if (responseTask.IsSuccessStatusCode)
             {
-                var readTask = result.Content.ReadAsStringAsync().Result;
+                var readTask = responseTask.Content.ReadAsStringAsync().Result;
                 var parseObject = JObject.Parse(readTask);
                 var dataOnly = parseObject["data"].ToString();
 

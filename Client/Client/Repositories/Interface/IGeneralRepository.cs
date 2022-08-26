@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Client.Repositories.Interface
 {
     public interface IGeneralRepository<TModel>
         where TModel : class
     {
-        List<TModel> Get();
+        Task<List<TModel>> Get();
         TModel Get(int id);
         HttpStatusCode Put(TModel model);
         HttpStatusCode Post(TModel model);
